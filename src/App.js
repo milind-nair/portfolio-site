@@ -1,6 +1,6 @@
 import * as React from 'react';
 import PersistentDrawerLeft from "./components/ResponsiveDrawer";
-import { createTheme, ThemeProvider, Button } from "@mui/material";
+import { createTheme, ThemeProvider } from "@mui/material";
 
 
 function App() {
@@ -17,10 +17,8 @@ function App() {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <PersistentDrawerLeft />
-        <Button onClick={toggleDarkMode}>
-          {darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
-        </Button>
+        <PersistentDrawerLeft darkMode={darkMode} toggleDarkMode ={toggleDarkMode} />
+        
       </ThemeProvider>
     </>
   );
