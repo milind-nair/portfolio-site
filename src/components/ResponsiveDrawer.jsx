@@ -5,6 +5,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
+import { Button } from "@mui/material";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -14,12 +15,13 @@ import ListItemText from "@mui/material/ListItemText";
 import MailIcon from "@mui/icons-material/Mail";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
+import DarkModeIcon from "@mui/icons-material/DarkMode";
 import { Typography, Container, Box } from "@mui/material";
 
 const drawerWidth = 240;
 
 function ResponsiveDrawer(props) {
-  const { window } = props;
+  const { window, darkMode, toggleDarkMode } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const handleDrawerToggle = () => {
@@ -42,19 +44,6 @@ function ResponsiveDrawer(props) {
           </ListItem>
         ))}
       </List>
-      {/* <Divider />
-      <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List> */}
     </div>
   );
 
@@ -67,7 +56,7 @@ function ResponsiveDrawer(props) {
       <AppBar
         position="fixed"
         sx={{
-          // width: { sm: `calc(100% - ${drawerWidth}px)` },
+          width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
           // backgroundColor: 'black',
         }}
@@ -93,10 +82,19 @@ function ResponsiveDrawer(props) {
               }}
             >
               <Typography variant="h4" gutterBottom>
-                <i> milindNair.js</i>
+                <i> milindNair.ts</i>
               </Typography>
             </Box>
           </Container>
+          <IconButton onClick={toggleDarkMode}>
+            <DarkModeIcon />
+            <Typography
+              variant="h6"
+              sx={{ ml: 2, display: { xs: "none", sm: "block" } }}
+            >
+              {darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+            </Typography>
+          </IconButton>
         </Toolbar>
       </AppBar>
       <Box
@@ -105,7 +103,6 @@ function ResponsiveDrawer(props) {
         // sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
         aria-label="mailbox folders"
       >
-        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Drawer
           container={container}
           variant="temporary"
@@ -124,21 +121,25 @@ function ResponsiveDrawer(props) {
         >
           {drawer}
         </Drawer>
-        {/* <Drawer
+        <Drawer
+          container={container}
           variant="permanent"
           sx={{
-            display: { xs: 'none', sm: 'block' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+            display: { xs: "none", sm: "block" },
+            "& .MuiDrawer-paper": {
+              boxSizing: "border-box",
+              width: drawerWidth,
+            },
           }}
-          open
         >
           {drawer}
-        </Drawer> */}
+        </Drawer>
       </Box>
       <Box
         component="main"
         sx={{
           flexGrow: 1,
+          ml: { sm: `${drawerWidth}px` },
           p: 3,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
         }}
