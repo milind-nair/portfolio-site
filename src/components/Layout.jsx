@@ -26,7 +26,7 @@ const navItems = [
   { text: 'Home', icon: <HomeIcon />, href: '#hero' },
   { text: 'About', icon: <PersonIcon />, href: '#about' },
   { text: 'Projects', icon: <WorkIcon />, href: '#projects' },
-  { text: 'Contact', icon: <EmailIcon />, href: '#footer' },
+  { text: 'Contact', icon: <EmailIcon />, href: '#contact' },
 ];
 
 function Layout(props) {
