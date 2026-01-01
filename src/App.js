@@ -1,26 +1,28 @@
 import * as React from 'react';
-import PersistentDrawerLeft from "./components/ResponsiveDrawer";
-import { createTheme, ThemeProvider } from "@mui/material";
-
+import { ThemeProvider } from "@mui/material";
+import Layout from "./components/Layout";
+import Hero from "./components/Hero";
+import About from "./components/About";
+import Projects from "./components/Projects";
+import { getTheme } from "./theme";
 
 function App() {
-  const [darkMode, setDarkMode] = React.useState(false);
+  const [mode, setMode] = React.useState('light');
 
   const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
+    setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
   };
-  const theme = createTheme({
-    palette: {
-      mode: darkMode ? "dark" : "light",
-    },
-  });
+
+  const theme = React.useMemo(() => getTheme(mode), [mode]);
+
   return (
-    <>
-      <ThemeProvider theme={theme}>
-        <PersistentDrawerLeft darkMode={darkMode} toggleDarkMode ={toggleDarkMode} />
-        
-      </ThemeProvider>
-    </>
+    <ThemeProvider theme={theme}>
+      <Layout darkMode={mode === 'dark'} toggleDarkMode={toggleDarkMode}>
+         <Hero />
+         <About />
+         <Projects />
+      </Layout>
+    </ThemeProvider>
   );
 }
 
