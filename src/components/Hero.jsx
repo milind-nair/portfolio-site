@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Typography, Button, Container } from '@mui/material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import { about } from '../constants';
 
 const Hero = () => {
   return (
@@ -19,13 +20,13 @@ const Hero = () => {
     >
       <Container maxWidth="md">
         <Typography variant="h1" component="h1" gutterBottom sx={{ background: '-webkit-linear-gradient(45deg, #2a5599 30%, #f50057 90%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-          Hello, I'm Milind.
+          Hello, I'm {about.name}.
         </Typography>
         <Typography variant="h3" color="text.secondary" gutterBottom>
-          Full Stack Developer & UI/UX Enthusiast
+          {about.role}
         </Typography>
         <Typography variant="body1" paragraph sx={{ fontSize: '1.2rem', maxWidth: '600px', mb: 4 }}>
-          I build full-stack web applications with a focus on modern user interfaces and robust backend systems. Let's build something amazing together.
+          {about.description}
         </Typography>
         <Button 
           variant="contained" 

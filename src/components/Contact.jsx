@@ -1,11 +1,11 @@
 import React from 'react';
-import { Box, Typography, Container, Paper, Link } from '@mui/material';
+import { Box, Typography, Container, Paper, Link, IconButton } from '@mui/material';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import EmailIcon from '@mui/icons-material/Email';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
-import IconButton from '@mui/material/IconButton';
+import { about } from '../constants';
 
 const Contact = () => {
   return (
@@ -22,27 +22,27 @@ const Contact = () => {
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <EmailIcon color="primary" />
                 <Typography variant="h6">
-                   <Link href="mailto:milind@example.com" underline="hover" color="inherit">
-                     milind@example.com
+                   <Link href={`mailto:${about.email}`} underline="hover" color="inherit">
+                     {about.email}
                    </Link>
                 </Typography>
             </Box>
              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <LocationOnIcon color="primary" />
                 <Typography variant="h6">
-                     San Francisco, CA
+                     {about.location}
                 </Typography>
             </Box>
         </Box>
 
         <Box sx={{ mt: 4, display: 'flex', justifyContent: 'center', gap: 2 }}>
-            <IconButton color="primary" href="https://github.com" target="_blank" aria-label="Github">
+            <IconButton color="primary" href={about.social.github} target="_blank" aria-label="Github">
                 <GitHubIcon fontSize="large" />
             </IconButton>
-            <IconButton color="primary" href="https://linkedin.com" target="_blank" aria-label="LinkedIn">
+            <IconButton color="primary" href={about.social.linkedin} target="_blank" aria-label="LinkedIn">
                 <LinkedInIcon fontSize="large" />
             </IconButton>
-            <IconButton color="primary" href="https://twitter.com" target="_blank" aria-label="Twitter">
+            <IconButton color="primary" href={about.social.twitter} target="_blank" aria-label="Twitter">
                 <TwitterIcon fontSize="large" />
             </IconButton>
         </Box>
