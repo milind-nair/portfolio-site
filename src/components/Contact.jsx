@@ -9,7 +9,7 @@ import IconButton from '@mui/material/IconButton';
 
 const Contact = () => {
   return (
-    <Container maxWidth="md" id="contact" sx={{ mb: 10 }}>
+    <Container maxWidth="lg" id="contact" sx={{ mb: 10 }}>
       <Typography variant="h2" gutterBottom>
         Get In Touch
       </Typography>
