@@ -19,6 +19,8 @@ import HomeIcon from '@mui/icons-material/Home';
 import PersonIcon from '@mui/icons-material/Person';
 import WorkIcon from '@mui/icons-material/Work';
 import EmailIcon from '@mui/icons-material/Email';
+import Avatar from '@mui/material/Avatar';
+import { about } from '../constants';
 
 const drawerWidth = 240;
 
@@ -38,26 +40,54 @@ function Layout(props) {
   };
 
   const drawer = (
-    <div>
-      <Toolbar>
-         <Typography variant="h6" color="primary" sx={{ fontWeight: 'bold' }}>
-            Portfolio
-         </Typography>
-      </Toolbar>
-      <Divider />
-      <List>
+    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <Box sx={{ p: 3, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
+        <Avatar 
+          sx={{ width: 80, height: 80, mb: 1, bgcolor: 'primary.main', fontSize: '2rem' }}
+        >
+            {about.name.charAt(0)}
+        </Avatar>
+        <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+            {about.name}
+        </Typography>
+        <Typography variant="body2" color="text.secondary" align="center">
+            {about.role}
+        </Typography>
+      </Box>
+      <Divider sx={{ mb: 2 }} />
+      <List sx={{ px: 2 }}>
         {navItems.map((item) => (
-          <ListItem key={item.text} disablePadding>
-            <ListItemButton component="a" href={item.href} onClick={() => setMobileOpen(false)}>
-              <ListItemIcon>
+          <ListItem key={item.text} disablePadding sx={{ mb: 1 }}>
+            <ListItemButton 
+              component="a" 
+              href={item.href} 
+              onClick={() => setMobileOpen(false)}
+              sx={{
+                borderRadius: 2,
+                '&:hover': {
+                    bgcolor: 'action.hover',
+                    color: 'primary.main',
+                    '& .MuiListItemIcon-root': {
+                        color: 'primary.main',
+                    }
+                }
+              }}
+            >
+              <ListItemIcon sx={{ minWidth: 40 }}>
                 {item.icon}
               </ListItemIcon>
-              <ListItemText primary={item.text} />
+              <ListItemText primary={item.text} primaryTypographyProps={{ fontWeight: 500 }} />
             </ListItemButton>
           </ListItem>
         ))}
       </List>
-    </div>
+      <Box sx={{ flexGrow: 1 }} />
+      <Box sx={{ p: 2, textAlign: 'center' }}>
+        <Typography variant="caption" color="text.secondary">
+            © {new Date().getFullYear()} {about.name}
+        </Typography>
+      </Box>
+    </Box>
   );
 
   const container =

@@ -10,11 +10,11 @@ export const about = {
     "React", "Node.js", "TypeScript", "Python", "GraphQL", 
     "Material UI", "Docker", "AWS", "Git"
   ],
-  email: "milind@example.com",
-  location: "San Francisco, CA",
+  email: "nairmilind3@gmail.com",
+  location: "Bengaluru, India",
   social: {
-    github: "https://github.com",
-    linkedin: "https://linkedin.com",
+    github: "https://github.com/milind-nair",
+    linkedin: "https://linkedin.com/in/milind-nair",
     twitter: "https://twitter.com"
   }
 };
