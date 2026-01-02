@@ -30,6 +30,32 @@ export const about = {
       duration: "2021 - 2023",
       description: "Developed and maintained multiple client-facing e-commerce platforms using React and Node.js."
     }
+  ],
+  blogs: [
+    {
+        title: "Understanding React Server Components",
+        image: "https://miro.medium.com/v2/resize:fit:1400/1*C97L3d8Jc4w5g2P7v3a5pA.png", // Example React image
+        link: "https://medium.com/",
+        date: "Dec 12, 2024",
+        readTime: "5 min read",
+        snippet: "A deep dive into how RSCs are changing the way we build web applications."
+    },
+    {
+        title: "Optimizing Web Performance in 2024",
+        image: "https://miro.medium.com/v2/resize:fit:1400/0*y6hK9p7p5q2r3s8t.jpg", // Placeholder
+        link: "https://medium.com/",
+        date: "Nov 28, 2024",
+        readTime: "8 min read",
+        snippet: "Key strategies for reducing bundle size and improving Core Web Vitals."
+    },
+    {
+        title: "The Future of AI in Software Development",
+        image: "https://miro.medium.com/v2/resize:fit:1400/1*uJ2w_8f8f8j8j8.png", // Placeholder
+        link: "https://medium.com/",
+        date: "Oct 15, 2024",
+        readTime: "6 min read",
+        snippet: "Exploring how LLMs are augmenting the developer workflow, not replacing it."
+    }
   ]
 };
 

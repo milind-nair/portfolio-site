@@ -24,6 +24,7 @@ import { about } from '../constants';
 import { useMode } from '../context/ModeContext';
 import CodeIcon from '@mui/icons-material/Code';
 import PeopleIcon from '@mui/icons-material/People';
+import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 
 const drawerWidth = 240;
 
@@ -31,6 +32,7 @@ const navItems = [
   { text: 'Home', icon: <HomeIcon />, href: '#hero' },
   { text: 'About', icon: <PersonIcon />, href: '#about' },
   { text: 'Projects', icon: <WorkIcon />, href: '#projects' },
+  { text: 'Blogs', icon: <AutoStoriesIcon />, href: '#blogs' },
   { text: 'Contact', icon: <EmailIcon />, href: '#contact' },
 ];
 
