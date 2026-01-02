@@ -1,5 +1,4 @@
-import React from 'react';
-import { Box, Typography, Container, Grid, Card, CardContent, CardMedia, CardActions, Button, Chip } from '@mui/material';
+import { Box, Typography, Container, Grid, Card, CardContent, CardActions, Button } from '@mui/material';
 import { about } from '../constants';
 import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';

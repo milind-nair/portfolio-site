@@ -1,5 +1,4 @@
-import React from 'react';
-import { Box, Typography, Container, Paper, Chip, Grid, Button, List, ListItem, ListItemText, ListItemIcon } from '@mui/material';
+import { Box, Typography, Container, Paper, Chip, Grid, Button, List, ListItem } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
 import BusinessIcon from '@mui/icons-material/Business';
 import { about } from '../constants';
