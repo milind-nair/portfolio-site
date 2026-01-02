@@ -3,8 +3,8 @@ export const about = {
   role: "Full Stack Developer & UI/UX Enthusiast",
   description: "I build full-stack web applications with a focus on modern user interfaces and robust backend systems. Let's build something amazing together.",
   bio: [
-    "I am a passionate software engineer with experience in building scalable web applications. My journey began with a curiosity for how things work on the internet, which led me to dive deep into front-end and back-end technologies.",
-    "When I'm not coding, you can find me exploring new tech trends, contributing to open source, or enjoying a good cup of coffee. I believe in writing clean, maintainable code and dealing with complex problems with simple, elegant solutions."
+    "I'm a Full Stack Developer with a knack for crafting seamless digital experiences. My passion lies in bridging the gap between elegant design and robust engineering. With a strong foundation in both front-end aesthetics and back-end logic, I enjoy tackling complex problems and turning them into intuitive, user-friendly solutions.",
+    "Beyond the code, I'm an avid learner who stays on top of the latest tech trends. Whether it's experimenting with new frameworks, optimizing web performance, or contributing to open-source projects, I'm always looking for ways to grow and improve. When I'm offline, you can catch me exploring the outdoors or brewing the perfect cup of coffee."
   ],
   skills: [
     "React", "Node.js", "TypeScript", "Python", "GraphQL", 

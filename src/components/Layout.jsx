@@ -14,7 +14,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
-import { Typography, Box } from "@mui/material";
+import { Typography, Box, Button } from "@mui/material";
 import HomeIcon from '@mui/icons-material/Home';
 import PersonIcon from '@mui/icons-material/Person';
 import WorkIcon from '@mui/icons-material/Work';
@@ -54,7 +54,10 @@ function Layout(props) {
             {about.role}
         </Typography>
       </Box>
-      <Divider sx={{ mb: 2 }} />
+      
+      {/* Replaced Divider with spacing */}
+      <Box sx={{ mb: 2 }} />
+
       <List sx={{ px: 2 }}>
         {navItems.map((item) => (
           <ListItem key={item.text} disablePadding sx={{ mb: 1 }}>
@@ -116,9 +119,20 @@ function Layout(props) {
             <MenuIcon />
           </IconButton>
           <Box sx={{ flexGrow: 1 }} /> 
-          <IconButton onClick={toggleDarkMode} color="inherit">
-            {darkMode ? <LightModeIcon /> : <DarkModeIcon />}
-          </IconButton>
+          <Button 
+            onClick={toggleDarkMode} 
+            color="inherit"
+            startIcon={darkMode ? <LightModeIcon /> : <DarkModeIcon />}
+            sx={{ 
+                borderRadius: 20, 
+                px: 2, 
+                textTransform: 'none',
+                borderColor: 'divider',
+                border: 1
+            }}
+          >
+            {darkMode ? "Light Mode" : "Dark Mode"}
+          </Button>
         </Toolbar>
       </AppBar>
       <Box
@@ -139,6 +153,8 @@ function Layout(props) {
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: drawerWidth,
+              borderRight: 'none',
+              bgcolor: 'background.default',
             },
           }}
         >
@@ -151,6 +167,8 @@ function Layout(props) {
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: drawerWidth,
+              borderRight: 'none',
+              bgcolor: (theme) =>  theme.palette.mode === 'light' ? '#f8f9fa' : '#1e1e1e', // Subtle background difference
             },
           }}
           open
