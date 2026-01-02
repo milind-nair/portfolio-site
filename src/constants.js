@@ -16,7 +16,21 @@ export const about = {
     github: "https://github.com/milind-nair",
     linkedin: "https://linkedin.com/in/milind-nair",
     twitter: "https://twitter.com"
-  }
+  },
+  experiences: [
+    {
+      company: "Tech Innovators Inc",
+      role: "Senior Full Stack Engineeer",
+      duration: "2023 - Present",
+      description: "Leading a team of 5 developers to build cloud-native applications. Improved system performance by 40%."
+    },
+    {
+      company: "Web Solutions Ltd",
+      role: "Full Stack Developer",
+      duration: "2021 - 2023",
+      description: "Developed and maintained multiple client-facing e-commerce platforms using React and Node.js."
+    }
+  ]
 };
 
 export const projects = [

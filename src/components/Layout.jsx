@@ -21,6 +21,9 @@ import WorkIcon from '@mui/icons-material/Work';
 import EmailIcon from '@mui/icons-material/Email';
 import Avatar from '@mui/material/Avatar';
 import { about } from '../constants';
+import { useMode } from '../context/ModeContext';
+import CodeIcon from '@mui/icons-material/Code';
+import PeopleIcon from '@mui/icons-material/People';
 
 const drawerWidth = 240;
 
@@ -34,6 +37,7 @@ const navItems = [
 function Layout(props) {
   const { window, darkMode, toggleDarkMode, children } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const { mode, toggleMode } = useMode();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -153,6 +157,29 @@ function Layout(props) {
             }}
           >
             {darkMode ? "Light Mode" : "Dark Mode"}
+          </Button>
+          
+          {/* Mode Toggle */}
+          <Button 
+            onClick={toggleMode} 
+            color="inherit"
+            startIcon={mode === 'dev' ? <CodeIcon /> : <PeopleIcon />}
+            sx={{ 
+                ml: 2,
+                borderRadius: 20, 
+                px: 2, 
+                textTransform: 'none',
+                borderColor: 'divider',
+                border: 1,
+                bgcolor: (theme) =>  mode === 'dev' ? 'rgba(42, 85, 153, 0.1)' : 'rgba(76, 175, 80, 0.1)',
+                color: (theme) => mode === 'dev' ? 'primary.main' : 'success.main',
+                fontWeight: 'bold',
+                '&:hover': {
+                    bgcolor: (theme) =>  mode === 'dev' ? 'rgba(42, 85, 153, 0.2)' : 'rgba(76, 175, 80, 0.2)',
+                }
+            }}
+          >
+            {mode === 'dev' ? "Dev Mode" : "Recruiter Mode"}
           </Button>
         </Toolbar>
       </AppBar>

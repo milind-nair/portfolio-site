@@ -1,8 +1,17 @@
 import React from 'react';
-import { Box, Typography, Container, Grid, Card, CardContent, CardActions, Button, Chip } from '@mui/material';
+import { Box, Typography, Container, Grid, Card, CardContent, CardActions, Button, Chip, Collapse, Alert } from '@mui/material';
 import { projects } from '../constants';
+import { useMode } from '../context/ModeContext';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const Projects = () => {
+  const { mode } = useMode();
+  const [expandedId, setExpandedId] = React.useState(-1);
+
+  const handleExpandClick = (index) => {
+    setExpandedId(expandedId === index ? -1 : index);
+  };
+
   return (
     <Container maxWidth="lg" id="projects" sx={{ mb: 10 }}>
       <Typography 
@@ -50,10 +59,38 @@ const Projects = () => {
                             ))}
                         </Box>
                     </CardContent>
-                    <CardActions>
-                        <Button size="small">View Code</Button>
-                        <Button size="small">Live Demo</Button>
+                    <CardActions sx={{ justifyContent: 'space-between', px: 2, pb: 2 }}>
+                        <Box>
+                            <Button size="small">View Code</Button>
+                            <Button size="small">Live Demo</Button>
+                        </Box>
+                        {mode === 'dev' && (
+                             <Button 
+                                size="small" 
+                                color="secondary"
+                                onClick={() => handleExpandClick(index)}
+                                endIcon={<ExpandMoreIcon sx={{ transform: expandedId === index ? 'rotate(180deg)' : 'rotate(0deg)', transition: '0.3s' }} />}
+                             >
+                                Tech Specs
+                             </Button>
+                        )}
                     </CardActions>
+                    <Collapse in={expandedId === index} timeout="auto" unmountOnExit>
+                        <CardContent sx={{ bgcolor: 'action.hover', borderTop: '1px solid', borderColor: 'divider' }}>
+                            <Typography variant="subtitle2" fontWeight="bold" gutterBottom>
+                                System Architecture
+                            </Typography>
+                            <Alert severity="info" sx={{ mb: 2, py: 0 }}>
+                                Diagram Loading... (Placeholder)
+                            </Alert>
+                            <Typography variant="subtitle2" fontWeight="bold" gutterBottom>
+                                Key Challenges
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary" paragraph>
+                                Optimizing database queries for high-volume transactions and implementing real-time WebSocket communication.
+                            </Typography>
+                        </CardContent>
+                    </Collapse>
                 </Card>
             </Grid>
         ))}
