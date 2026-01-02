@@ -104,11 +104,15 @@ function Layout(props) {
         sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
+          bgcolor: (theme) => theme.palette.mode === 'light' ? 'rgba(255, 255, 255, 0.7)' : 'rgba(18, 18, 18, 0.7)',
+          backdropFilter: 'blur(20px)',
+          borderBottom: '1px solid',
+          borderColor: (theme) => theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.05)' : 'rgba(255, 255, 255, 0.05)',
         }}
         color="inherit" 
         elevation={0}
       >
-        <Toolbar sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Toolbar>
           <IconButton
             color="inherit"
             aria-label="open drawer"
