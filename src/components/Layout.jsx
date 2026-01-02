@@ -99,6 +99,23 @@ function Layout(props) {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
+      
+      {/* Global Background (Aurora) */}
+      <Box
+        sx={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          zIndex: -1,
+          background: (theme) => theme.palette.mode === 'light'
+             ? 'radial-gradient(circle at 0% 0%, rgba(42, 85, 153, 0.05) 0%, rgba(255, 255, 255, 0) 50%), radial-gradient(circle at 100% 100%, rgba(245, 0, 87, 0.05) 0%, rgba(255, 255, 255, 0) 50%)'
+             : 'radial-gradient(circle at 0% 0%, rgba(144, 202, 249, 0.08) 0%, rgba(18, 18, 18, 0) 50%), radial-gradient(circle at 100% 100%, rgba(244, 143, 177, 0.08) 0%, rgba(18, 18, 18, 0) 50%)',
+          bgcolor: 'background.default', // Fallback
+        }}
+      />
+
       <AppBar
         position="fixed"
         sx={{

@@ -12,7 +12,16 @@ const Contact = () => {
     <Container maxWidth="md" id="contact" sx={{ mb: 10 }}>
       {/* Section Header */}
       <Box sx={{ mb: 6, textAlign: 'center' }}>
-         <Typography variant="h2" gutterBottom sx={{ fontWeight: 800 }}>
+         <Typography 
+            variant="h2" 
+            gutterBottom 
+            sx={{ 
+                background: (theme) => theme.palette.mode === 'light' ? 'linear-gradient(45deg, #2a5599 30%, #f50057 90%)' : 'linear-gradient(45deg, #90caf9 30%, #f48fb1 90%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                fontWeight: 800
+            }}
+         >
             Let's Connect
          </Typography>
          <Typography variant="h6" color="text.secondary" sx={{ maxWidth: '600px', mx: 'auto' }}>
@@ -27,9 +36,11 @@ const Contact = () => {
             p: 6, 
             borderRadius: 4, 
             textAlign: 'center',
-            background: (theme) => theme.palette.mode === 'light' ? 'linear-gradient(135deg, #ffffff 0%, #f0f7ff 100%)' : 'linear-gradient(135deg, #1e1e1e 0%, #252525 100%)',
+            background: (theme) => theme.palette.mode === 'light' ? 'rgba(255, 255, 255, 0.4)' : 'rgba(30, 30, 30, 0.4)',
+            backdropFilter: 'blur(24px)',
             border: '1px solid',
-            borderColor: 'divider'
+            borderColor: (theme) => theme.palette.mode === 'light' ? 'rgba(255, 255, 255, 0.3)' : 'rgba(255, 255, 255, 0.05)',
+            boxShadow: (theme) => theme.palette.mode === 'light' ? '0 8px 32px 0 rgba(31, 38, 135, 0.07)' : '0 8px 32px 0 rgba(0, 0, 0, 0.37)'
         }}
       >
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, alignItems: 'center', mb: 4 }}>

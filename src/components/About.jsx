@@ -7,7 +7,17 @@ const About = () => {
     <Container maxWidth="lg" id="about" sx={{ mb: 10 }}>
       <Grid container spacing={4}>
         <Grid item xs={12} md={8}>
-          <Typography variant="h2" gutterBottom>
+          <Typography 
+            variant="h2" 
+            gutterBottom
+            sx={{
+               background: (theme) => theme.palette.mode === 'light' ? 'linear-gradient(45deg, #2a5599 30%, #f50057 90%)' : 'linear-gradient(45deg, #90caf9 30%, #f48fb1 90%)',
+               WebkitBackgroundClip: 'text',
+               WebkitTextFillColor: 'transparent',
+               fontWeight: 800,
+               mb: 4
+            }}
+          >
             About Me
           </Typography>
           <Paper elevation={0} sx={{ p: 0, bgcolor: 'transparent' }}>
@@ -25,7 +35,20 @@ const About = () => {
             </Typography>
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
               {about.skills.map((skill) => (
-                <Chip key={skill} label={skill} variant="outlined" color="primary" />
+                <Chip 
+                    key={skill} 
+                    label={skill} 
+                    color="primary" // Default is solid/filled
+                    sx={{ 
+                        fontWeight: 500,
+                        transition: 'all 0.2s',
+                        '&:hover': {
+                            transform: 'translateY(-2px)',
+                            boxShadow: 3,
+                            background: (theme) => theme.palette.primary.dark
+                        }
+                    }}
+                />
               ))}
             </Box>
            </Box>
