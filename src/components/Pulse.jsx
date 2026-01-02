@@ -18,6 +18,8 @@ const StatCard = ({ icon, title, value, subtext, link }) => (
         alignItems: 'center',
         gap: 1,
         borderRadius: 4,
+        width: '100%',
+        height: '100%',
         background: (theme) => theme.palette.mode === 'light' ? 'rgba(255, 255, 255, 0.4)' : 'rgba(30, 30, 30, 0.4)',
         backdropFilter: 'blur(24px)',
         border: '1px solid',
@@ -81,7 +83,7 @@ const Pulse = () => {
         Live Activity (Pulse)
       </Typography>
       <Grid container spacing={3}>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid item xs={12} sm={6} md={4}>
             {loading ? <Skeleton variant="rectangular" height={160} sx={{ borderRadius: 4 }} /> : (
                 <StatCard 
                     icon={<GitHubIcon />}
@@ -91,7 +93,7 @@ const Pulse = () => {
                 />
             )}
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid item xs={12} sm={6} md={4}>
             {loading ? <Skeleton variant="rectangular" height={160} sx={{ borderRadius: 4 }} /> : (
                 <StatCard 
                     icon={<CodeIcon />}
@@ -102,7 +104,7 @@ const Pulse = () => {
                 />
             )}
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid item xs={12} sm={6} md={4}>
             <StatCard 
                 icon={<AccessTimeIcon />}
                 title="Coding Hours"
