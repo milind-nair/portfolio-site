@@ -7,7 +7,7 @@ import { useMode } from '../context/ModeContext';
 const About = () => {
   const { mode } = useMode();
   return (
-    <Container maxWidth="lg" id="about" sx={{ mb: 10 }}>
+    <Container maxWidth="lg" id="about" sx={{ mb: 10, scrollMarginTop: '100px' }}>
       <Grid container spacing={4}>
         <Grid item xs={12} md={8}>
           <Typography 

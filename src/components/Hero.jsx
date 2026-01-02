@@ -8,6 +8,7 @@ const Hero = () => {
     <Box
       id="hero"
       sx={{
+        scrollMarginTop: '100px',
         minHeight: '80vh',
         display: 'flex',
         flexDirection: 'column',

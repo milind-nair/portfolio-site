@@ -5,7 +5,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 const Blogs = () => {
   return (
-    <Container maxWidth="lg" id="blogs" sx={{ mb: 10 }}>
+    <Container maxWidth="lg" id="blogs" sx={{ mb: 10, scrollMarginTop: '100px' }}>
        <Typography 
         variant="h2" 
         gutterBottom

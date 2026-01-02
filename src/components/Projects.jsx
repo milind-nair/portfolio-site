@@ -13,7 +13,7 @@ const Projects = () => {
   };
 
   return (
-    <Container maxWidth="lg" id="projects" sx={{ mb: 10 }}>
+    <Container maxWidth="lg" id="projects" sx={{ mb: 10, scrollMarginTop: '100px' }}>
       <Typography 
         variant="h2" 
         gutterBottom

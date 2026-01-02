@@ -9,7 +9,7 @@ import { about } from '../constants';
 
 const Contact = () => {
   return (
-    <Container maxWidth="md" id="contact" sx={{ mb: 10 }}>
+    <Container maxWidth="md" id="contact" sx={{ mb: 10, scrollMarginTop: '100px' }}>
       {/* Section Header */}
       <Box sx={{ mb: 6, textAlign: 'center' }}>
          <Typography 
