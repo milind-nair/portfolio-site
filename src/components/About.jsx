@@ -100,7 +100,8 @@ const About = () => {
                         variant="contained" 
                         color="secondary" 
                         startIcon={<DownloadIcon />}
-                        href="/resume.pdf"
+                        href={`${process.env.PUBLIC_URL}/resume.pdf`}
+                        download="Milind_Nair_Resume.pdf"
                         target="_blank"
                         fullWidth
                     >
