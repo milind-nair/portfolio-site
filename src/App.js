@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ThemeProvider } from "@mui/material";
+import { ThemeProvider, GlobalStyles } from "@mui/material";
 import Layout from "./components/Layout";
 import Hero from "./components/Hero";
 import About from "./components/About";
@@ -11,7 +11,13 @@ import { getTheme } from "./theme";
 import { ModeProvider, useMode } from "./context/ModeContext";
 
 function App() {
-  const [mode, setMode] = React.useState('light');
+  const [mode, setMode] = React.useState(() => {
+    if (typeof window === 'undefined') {
+      return 'light';
+    }
+    const saved = window.localStorage.getItem('portfolio:colorMode');
+    return saved === 'dark' ? 'dark' : 'light';
+  });
 
   const toggleDarkMode = () => {
     setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
@@ -19,10 +25,17 @@ function App() {
 
   const theme = React.useMemo(() => getTheme(mode), [mode]);
 
+  React.useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+    window.localStorage.setItem('portfolio:colorMode', mode);
+  }, [mode]);
 
   return (
     <ModeProvider>
       <ThemeProvider theme={theme}>
+        <GlobalStyles styles={{ html: { scrollBehavior: 'smooth', scrollPaddingTop: '96px' } }} />
         <Layout darkMode={mode === 'dark'} toggleDarkMode={toggleDarkMode}>
           <Hero />
           <About />

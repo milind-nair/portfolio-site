@@ -1,15 +1,99 @@
 import React from 'react';
-import { Box, Typography, Container, Grid, Card, CardContent, CardActions, Button, Chip, Collapse, Alert } from '@mui/material';
+import {
+  Box,
+  Typography,
+  Container,
+  Grid,
+  Card,
+  CardContent,
+  CardActions,
+  Button,
+  Chip,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  CardMedia,
+  TextField,
+  InputAdornment,
+  Divider,
+  List,
+  ListItem,
+  ListItemText,
+  Stack
+} from '@mui/material';
 import { projects } from '../constants';
 import { useMode } from '../context/ModeContext';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import SearchIcon from '@mui/icons-material/Search';
 
 const Projects = () => {
   const { mode } = useMode();
-  const [expandedId, setExpandedId] = React.useState(-1);
+  const [selectedTags, setSelectedTags] = React.useState([]);
+  const [searchTerm, setSearchTerm] = React.useState('');
+  const [activeProject, setActiveProject] = React.useState(null);
+  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
 
-  const handleExpandClick = (index) => {
-    setExpandedId(expandedId === index ? -1 : index);
+  const tagOptions = React.useMemo(() => {
+    const counts = new Map();
+    projects.forEach((project) => {
+      (project.tags || []).forEach((tag) => {
+        counts.set(tag, (counts.get(tag) || 0) + 1);
+      });
+    });
+    return Array.from(counts.entries())
+      .map(([tag, count]) => ({ tag, count }))
+      .sort((a, b) => a.tag.localeCompare(b.tag));
+  }, []);
+
+  const filteredProjects = React.useMemo(() => {
+    const normalizedTerm = searchTerm.trim().toLowerCase();
+
+    return projects.filter((project) => {
+      const tags = project.tags || [];
+      const matchesTags =
+        selectedTags.length === 0 || tags.some((tag) => selectedTags.includes(tag));
+
+      if (!matchesTags) {
+        return false;
+      }
+
+      if (!normalizedTerm) {
+        return true;
+      }
+
+      const detailParts = [
+        project.title,
+        project.description,
+        ...(project.tags || []),
+        project.details?.summary,
+        project.details?.impact,
+        project.details?.role,
+        ...(project.details?.features || []),
+        ...(project.details?.stack || []),
+        ...(project.details?.challenges || []),
+        project.details?.architecture
+      ]
+        .filter(Boolean)
+        .join(' ')
+        .toLowerCase();
+
+      return detailParts.includes(normalizedTerm);
+    });
+  }, [searchTerm, selectedTags]);
+
+  const handleTagToggle = (tag) => {
+    setSelectedTags((prev) =>
+      prev.includes(tag) ? prev.filter((item) => item !== tag) : [...prev, tag]
+    );
+  };
+
+  const handleOpenDialog = (project) => {
+    setActiveProject(project);
+    setIsDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setIsDialogOpen(false);
   };
 
   return (
@@ -27,9 +111,44 @@ const Projects = () => {
       >
         Featured Projects
       </Typography>
+
+      <Box sx={{ mb: 4 }}>
+        <TextField
+          fullWidth
+          size="small"
+          label="Search projects"
+          value={searchTerm}
+          onChange={(event) => setSearchTerm(event.target.value)}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon fontSize="small" />
+              </InputAdornment>
+            ),
+          }}
+        />
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 2 }}>
+          <Chip
+            label={`All (${projects.length})`}
+            color={selectedTags.length === 0 ? 'primary' : 'default'}
+            onClick={() => setSelectedTags([])}
+            variant={selectedTags.length === 0 ? 'filled' : 'outlined'}
+          />
+          {tagOptions.map((option) => (
+            <Chip
+              key={option.tag}
+              label={`${option.tag} (${option.count})`}
+              color={selectedTags.includes(option.tag) ? 'primary' : 'default'}
+              variant={selectedTags.includes(option.tag) ? 'filled' : 'outlined'}
+              onClick={() => handleTagToggle(option.tag)}
+            />
+          ))}
+        </Box>
+      </Box>
+
       <Grid container spacing={4}>
-        {projects.map((project, index) => (
-            <Grid item key={index} xs={12} sm={6} md={4}>
+        {filteredProjects.map((project) => (
+            <Grid item key={project.title} xs={12} sm={6} md={4}>
                 <Card 
                   sx={{ 
                     height: '100%', 
@@ -42,10 +161,13 @@ const Projects = () => {
                     boxShadow: (theme) => theme.palette.mode === 'light' ? '0 8px 32px 0 rgba(31, 38, 135, 0.07)' : '0 8px 32px 0 rgba(0, 0, 0, 0.37)'
                   }}
                 >
-                    {/* Placeholder image usage */}
-                    <Box sx={{ height: 200, bgcolor: 'grey.300', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                         <Typography variant="caption" color="text.secondary">Project Preview</Typography>
-                    </Box>
+                    <CardMedia
+                      component="img"
+                      height="200"
+                      image={project.image}
+                      alt={`${project.title} preview`}
+                      loading="lazy"
+                    />
                     <CardContent sx={{ flexGrow: 1 }}>
                         <Typography gutterBottom variant="h5" component="h2">
                             {project.title}
@@ -60,41 +182,162 @@ const Projects = () => {
                         </Box>
                     </CardContent>
                     <CardActions sx={{ justifyContent: 'space-between', px: 2, pb: 2 }}>
-                        <Box>
-                            <Button size="small">View Code</Button>
-                            <Button size="small">Live Demo</Button>
+                        <Box sx={{ display: 'flex', gap: 1 }}>
+                          {project.codeUrl && (
+                            <Button
+                              size="small"
+                              href={project.codeUrl}
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              View Code
+                            </Button>
+                          )}
+                          {project.demoUrl && (
+                            <Button
+                              size="small"
+                              href={project.demoUrl}
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              Live Demo
+                            </Button>
+                          )}
                         </Box>
-                        {mode === 'dev' && (
-                             <Button 
-                                size="small" 
-                                color="secondary"
-                                onClick={() => handleExpandClick(index)}
-                                endIcon={<ExpandMoreIcon sx={{ transform: expandedId === index ? 'rotate(180deg)' : 'rotate(0deg)', transition: '0.3s' }} />}
-                             >
-                                Tech Specs
-                             </Button>
-                        )}
+                        <Button 
+                          size="small" 
+                          color="secondary"
+                          onClick={() => handleOpenDialog(project)}
+                        >
+                          View Details
+                        </Button>
                     </CardActions>
-                    <Collapse in={expandedId === index} timeout="auto" unmountOnExit>
-                        <CardContent sx={{ bgcolor: 'action.hover', borderTop: '1px solid', borderColor: 'divider' }}>
-                            <Typography variant="subtitle2" fontWeight="bold" gutterBottom>
-                                System Architecture
-                            </Typography>
-                            <Alert severity="info" sx={{ mb: 2, py: 0 }}>
-                                Diagram Loading... (Placeholder)
-                            </Alert>
-                            <Typography variant="subtitle2" fontWeight="bold" gutterBottom>
-                                Key Challenges
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary" paragraph>
-                                Optimizing database queries for high-volume transactions and implementing real-time WebSocket communication.
-                            </Typography>
-                        </CardContent>
-                    </Collapse>
                 </Card>
             </Grid>
         ))}
       </Grid>
+
+      {filteredProjects.length === 0 && (
+        <Box sx={{ mt: 4, textAlign: 'center' }}>
+          <Typography variant="body1" color="text.secondary" sx={{ mb: 2 }}>
+            No projects match your filters.
+          </Typography>
+          <Button variant="outlined" onClick={() => { setSelectedTags([]); setSearchTerm(''); }}>
+            Clear Filters
+          </Button>
+        </Box>
+      )}
+
+      <Dialog
+        open={isDialogOpen}
+        onClose={handleCloseDialog}
+        maxWidth="md"
+        fullWidth
+        TransitionProps={{ onExited: () => setActiveProject(null) }}
+      >
+        <DialogTitle>{activeProject?.title || 'Project Details'}</DialogTitle>
+        <DialogContent dividers>
+          {activeProject ? (
+            <Stack spacing={2}>
+              <CardMedia
+                component="img"
+                height="240"
+                image={activeProject.image}
+                alt={`${activeProject.title} preview`}
+                loading="lazy"
+                sx={{ borderRadius: 2 }}
+              />
+
+              <Typography variant="body1">
+                {activeProject.details?.summary || activeProject.description}
+              </Typography>
+
+              <Box>
+                <Typography variant="subtitle2" fontWeight="bold">Role</Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {activeProject.details?.role || 'Details coming soon.'}
+                </Typography>
+              </Box>
+
+              <Box>
+                <Typography variant="subtitle2" fontWeight="bold">Impact</Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {activeProject.details?.impact || 'Details coming soon.'}
+                </Typography>
+              </Box>
+
+              <Divider />
+
+              <Box>
+                <Typography variant="subtitle2" fontWeight="bold">Stack</Typography>
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 1 }}>
+                  {(activeProject.details?.stack || activeProject.tags || []).map((stackItem) => (
+                    <Chip key={stackItem} label={stackItem} size="small" />
+                  ))}
+                </Box>
+              </Box>
+
+              <Box>
+                <Typography variant="subtitle2" fontWeight="bold">Key Features</Typography>
+                <List dense>
+                  {(activeProject.details?.features || []).map((feature) => (
+                    <ListItem key={feature} disableGutters>
+                      <ListItemText primary={feature} />
+                    </ListItem>
+                  ))}
+                </List>
+              </Box>
+
+              {mode === 'dev' && (
+                <>
+                  <Divider />
+                  <Box>
+                    <Typography variant="subtitle2" fontWeight="bold">Architecture</Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {activeProject.details?.architecture || 'Details coming soon.'}
+                    </Typography>
+                  </Box>
+                  <Box>
+                    <Typography variant="subtitle2" fontWeight="bold">Challenges</Typography>
+                    <List dense>
+                      {(activeProject.details?.challenges || []).map((challenge) => (
+                        <ListItem key={challenge} disableGutters>
+                          <ListItemText primary={challenge} />
+                        </ListItem>
+                      ))}
+                    </List>
+                  </Box>
+                </>
+              )}
+            </Stack>
+          ) : (
+            <Typography variant="body2" color="text.secondary">
+              Loading project details...
+            </Typography>
+          )}
+        </DialogContent>
+        <DialogActions>
+          {activeProject?.codeUrl && (
+            <Button
+              href={activeProject.codeUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
+              View Code
+            </Button>
+          )}
+          {activeProject?.demoUrl && (
+            <Button
+              href={activeProject.demoUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Live Demo
+            </Button>
+          )}
+          <Button onClick={handleCloseDialog}>Close</Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 };

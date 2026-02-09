@@ -28,21 +28,56 @@ import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 const drawerWidth = 240;
 
 const navItems = [
-  { text: 'Home', icon: <HomeIcon />, href: '#hero' },
-  { text: 'About', icon: <PersonIcon />, href: '#about' },
-  { text: 'Projects', icon: <WorkIcon />, href: '#projects' },
-  { text: 'Blogs', icon: <AutoStoriesIcon />, href: '#blogs' },
-  { text: 'Contact', icon: <EmailIcon />, href: '#contact' },
+  { id: 'hero', text: 'Home', icon: <HomeIcon />, href: '#hero' },
+  { id: 'about', text: 'About', icon: <PersonIcon />, href: '#about' },
+  { id: 'projects', text: 'Projects', icon: <WorkIcon />, href: '#projects' },
+  { id: 'blogs', text: 'Blogs', icon: <AutoStoriesIcon />, href: '#blogs' },
+  { id: 'contact', text: 'Contact', icon: <EmailIcon />, href: '#contact' },
 ];
 
 function Layout(props) {
   const { window, darkMode, toggleDarkMode, children } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const { mode, toggleMode } = useMode();
+  const [activeSection, setActiveSection] = React.useState('hero');
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+
+  React.useEffect(() => {
+    if (typeof document === 'undefined') {
+      return undefined;
+    }
+
+    const doc = window ? window().document : document;
+    const sections = navItems
+      .map((item) => doc.getElementById(item.id))
+      .filter(Boolean);
+
+    if (sections.length === 0) {
+      return undefined;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      {
+        root: null,
+        rootMargin: '-120px 0px -60% 0px',
+        threshold: 0.2,
+      }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+
+    return () => observer.disconnect();
+  }, [window]);
 
   const drawer = (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -70,8 +105,17 @@ function Layout(props) {
               component="a" 
               href={item.href} 
               onClick={() => setMobileOpen(false)}
+              selected={activeSection === item.id}
+              aria-current={activeSection === item.id ? 'page' : undefined}
               sx={{
                 borderRadius: 2,
+                '&.Mui-selected': {
+                    bgcolor: 'action.selected',
+                    color: 'primary.main',
+                    '& .MuiListItemIcon-root': {
+                        color: 'primary.main',
+                    }
+                },
                 '&:hover': {
                     bgcolor: 'action.hover',
                     color: 'primary.main',
