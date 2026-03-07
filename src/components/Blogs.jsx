@@ -4,8 +4,25 @@ import { about } from '../constants';
 import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
+const parseBlogDate = (dateLabel = '') => {
+  const timestamp = Date.parse(dateLabel);
+  return Number.isNaN(timestamp) ? 0 : timestamp;
+};
+
 const Blogs = () => {
   const [brokenImages, setBrokenImages] = React.useState({});
+  const sortedBlogs = React.useMemo(
+    () =>
+      [...about.blogs].sort((a, b) => {
+        const byDate = parseBlogDate(b.date) - parseBlogDate(a.date);
+        if (byDate !== 0) {
+          return byDate;
+        }
+
+        return a.title.localeCompare(b.title);
+      }),
+    []
+  );
 
   return (
     <Container maxWidth="lg" id="blogs" sx={{ mb: 10, scrollMarginTop: '100px' }}>
@@ -24,7 +41,7 @@ const Blogs = () => {
       </Typography>
 
       <Grid container spacing={4}>
-        {about.blogs.map((blog) => {
+        {sortedBlogs.map((blog) => {
             const blogImage = blog.image;
             const imageUnavailable = !blogImage || brokenImages[blog.link];
 

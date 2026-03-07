@@ -237,6 +237,54 @@ export const projects = [
     }
   },
   {
+    title: "Online Base Convertor",
+    description: "Client-side web tool that converts numbers from one base to all other bases in real time.",
+    tags: ["JavaScript", "Web App", "Utilities"],
+    image: "https://source.unsplash.com/random/800x600?numbers,calculator",
+    codeUrl: "https://github.com/milind-nair/convertor",
+    demoUrl: "https://milind-nair.github.io/convertor/",
+    details: {
+      summary: "An interactive number-system convertor that updates outputs across bases instantly as the input changes.",
+      role: "Project author and engineer",
+      impact: "Made base conversion learning and quick developer checks faster through immediate multi-base output.",
+      stack: ["JavaScript", "HTML", "CSS"],
+      features: [
+        "Real-time conversion across multiple number bases",
+        "Fully client-side experience with no backend dependency",
+        "Published static demo via GitHub Pages"
+      ],
+      challenges: [
+        "Handling input validation across base systems",
+        "Keeping conversion output consistent during continuous typing"
+      ],
+      architecture: "Browser-based UI parses input in the selected base and computes equivalent representations for target bases on each change event."
+    }
+  },
+  {
+    title: "Rate Limit Header Explainer",
+    description: "TypeScript utility that turns API rate-limit response headers into clear human-readable messages.",
+    tags: ["TypeScript", "NPM", "Developer Tooling"],
+    image: "https://source.unsplash.com/random/800x600?api,rate-limit",
+    codeUrl: "https://github.com/milind-nair/rate-limit-readable",
+    demoUrl: "https://milind-nair.github.io/rate-limit-readable/demo/",
+    details: {
+      summary: "Reusable npm library for interpreting rate-limit headers for user-facing and developer-facing messaging.",
+      role: "Project author and maintainer",
+      impact: "Improved API client UX by converting raw limit headers into actionable feedback.",
+      stack: ["TypeScript", "Jest", "NPM", "GitHub Actions"],
+      features: [
+        "Parses common `X-RateLimit-*` and `Retry-After` headers",
+        "Supports short and verbose explanation styles",
+        "Provides severity and retry timing fields for UI handling"
+      ],
+      challenges: [
+        "Normalizing differences in header casing and formats",
+        "Producing concise messages without losing technical accuracy"
+      ],
+      architecture: "Core parser maps response headers into a typed explanation model, then formats user/developer-facing messages based on configurable options."
+    }
+  },
+  {
     title: "Portfolio Site",
     description: "Personal portfolio website with recruiter/dev views, project search, and live profile integrations.",
     tags: ["React", "MUI", "Portfolio"],

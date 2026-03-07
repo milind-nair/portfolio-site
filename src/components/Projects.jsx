@@ -22,7 +22,7 @@ import {
   ListItemText,
   Stack
 } from '@mui/material';
-import { projects } from '../constants';
+import { projects, about } from '../constants';
 import { useMode } from '../context/ModeContext';
 import SearchIcon from '@mui/icons-material/Search';
 import CodeIcon from '@mui/icons-material/Code';
@@ -167,19 +167,39 @@ const Projects = () => {
 
   return (
     <Container maxWidth="lg" id="projects" sx={{ mb: 10, scrollMarginTop: '100px' }}>
-      <Typography 
-        variant="h2" 
-        gutterBottom
+      <Box
         sx={{
-           background: (theme) => theme.palette.mode === 'light' ? 'linear-gradient(45deg, #2a5599 30%, #f50057 90%)' : 'linear-gradient(45deg, #90caf9 30%, #f48fb1 90%)',
-           WebkitBackgroundClip: 'text',
-           WebkitTextFillColor: 'transparent',
-           fontWeight: 800,
-           mb: 6
+          display: 'flex',
+          alignItems: { xs: 'flex-start', sm: 'center' },
+          justifyContent: 'space-between',
+          gap: 2,
+          mb: 3,
+          flexWrap: 'wrap'
         }}
       >
-        Featured Projects
-      </Typography>
+        <Typography 
+          variant="h2" 
+          gutterBottom
+          sx={{
+             background: (theme) => theme.palette.mode === 'light' ? 'linear-gradient(45deg, #2a5599 30%, #f50057 90%)' : 'linear-gradient(45deg, #90caf9 30%, #f48fb1 90%)',
+             WebkitBackgroundClip: 'text',
+             WebkitTextFillColor: 'transparent',
+             fontWeight: 800,
+             mb: 0
+          }}
+        >
+          Featured Projects
+        </Typography>
+        <Button
+          variant="outlined"
+          href={about.social.github}
+          target="_blank"
+          rel="noreferrer"
+          startIcon={<CodeIcon fontSize="small" />}
+        >
+          View All on GitHub
+        </Button>
+      </Box>
 
       <Box sx={{ mb: 4 }}>
         <TextField
