@@ -118,6 +118,7 @@ export const about = {
 export const projects = [
   {
     title: "Mock Server Generator",
+    pinned: true,
     description: "CLI tool to generate stateful mock servers from OpenAPI specifications, with hot reloading and traffic replay capabilities.",
     tags: ["Node.js", "OpenAPI", "Developer Tooling"],
     image: "https://source.unsplash.com/random/800x600?api,server",
@@ -142,6 +143,7 @@ export const projects = [
   },
   {
     title: "UML Generator from Natural Language",
+    pinned: true,
     description: "Python tool that converts natural language system descriptions into UML diagrams using LangChain and PlantUML.",
     tags: ["Python", "LangChain", "PlantUML"],
     image: "https://source.unsplash.com/random/800x600?uml,diagram",
@@ -262,6 +264,7 @@ export const projects = [
   },
   {
     title: "Rate Limit Header Explainer",
+    pinned: true,
     description: "TypeScript utility that turns API rate-limit response headers into clear human-readable messages.",
     tags: ["TypeScript", "NPM", "Developer Tooling"],
     image: "https://source.unsplash.com/random/800x600?api,rate-limit",
@@ -286,6 +289,7 @@ export const projects = [
   },
   {
     title: "Portfolio Site",
+    pinned: true,
     description: "Personal portfolio website with recruiter/dev views, project search, and live profile integrations.",
     tags: ["React", "MUI", "Portfolio"],
     image: "https://source.unsplash.com/random/800x600?portfolio,website",

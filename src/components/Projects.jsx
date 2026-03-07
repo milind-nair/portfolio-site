@@ -77,10 +77,15 @@ const getProjectKey = (project) => project.codeUrl || project.title;
 const Projects = () => {
   const { mode } = useMode();
   const [selectedTags, setSelectedTags] = React.useState([]);
+  const [showPinnedOnly, setShowPinnedOnly] = React.useState(false);
   const [searchTerm, setSearchTerm] = React.useState('');
   const [activeProject, setActiveProject] = React.useState(null);
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
   const [previewFailures, setPreviewFailures] = React.useState({});
+  const pinnedProjectCount = React.useMemo(
+    () => projects.filter((project) => project.pinned).length,
+    []
+  );
 
   const tagOptions = React.useMemo(() => {
     const counts = new Map();
@@ -97,38 +102,44 @@ const Projects = () => {
   const filteredProjects = React.useMemo(() => {
     const normalizedTerm = searchTerm.trim().toLowerCase();
 
-    return projects.filter((project) => {
-      const tags = project.tags || [];
-      const matchesTags =
-        selectedTags.length === 0 || tags.some((tag) => selectedTags.includes(tag));
+    return projects
+      .filter((project) => {
+        const tags = project.tags || [];
+        const matchesTags =
+          selectedTags.length === 0 || tags.some((tag) => selectedTags.includes(tag));
 
-      if (!matchesTags) {
-        return false;
-      }
+        if (!matchesTags) {
+          return false;
+        }
 
-      if (!normalizedTerm) {
-        return true;
-      }
+        if (showPinnedOnly && !project.pinned) {
+          return false;
+        }
 
-      const detailParts = [
-        project.title,
-        project.description,
-        ...(project.tags || []),
-        project.details?.summary,
-        project.details?.impact,
-        project.details?.role,
-        ...(project.details?.features || []),
-        ...(project.details?.stack || []),
-        ...(project.details?.challenges || []),
-        project.details?.architecture
-      ]
-        .filter(Boolean)
-        .join(' ')
-        .toLowerCase();
+        if (!normalizedTerm) {
+          return true;
+        }
 
-      return detailParts.includes(normalizedTerm);
-    });
-  }, [searchTerm, selectedTags]);
+        const detailParts = [
+          project.title,
+          project.description,
+          ...(project.tags || []),
+          project.details?.summary,
+          project.details?.impact,
+          project.details?.role,
+          ...(project.details?.features || []),
+          ...(project.details?.stack || []),
+          ...(project.details?.challenges || []),
+          project.details?.architecture
+        ]
+          .filter(Boolean)
+          .join(' ')
+          .toLowerCase();
+
+        return detailParts.includes(normalizedTerm);
+      })
+      .sort((a, b) => Number(Boolean(b.pinned)) - Number(Boolean(a.pinned)));
+  }, [searchTerm, selectedTags, showPinnedOnly]);
 
   const handleTagToggle = (tag) => {
     setSelectedTags((prev) =>
@@ -219,9 +230,19 @@ const Projects = () => {
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 2 }}>
           <Chip
             label={`All (${projects.length})`}
-            color={selectedTags.length === 0 ? 'primary' : 'default'}
-            onClick={() => setSelectedTags([])}
-            variant={selectedTags.length === 0 ? 'filled' : 'outlined'}
+            color={selectedTags.length === 0 && !showPinnedOnly ? 'primary' : 'default'}
+            onClick={() => {
+              setSelectedTags([]);
+              setShowPinnedOnly(false);
+            }}
+            variant={selectedTags.length === 0 && !showPinnedOnly ? 'filled' : 'outlined'}
+          />
+          <Chip
+            label={`Pinned (${pinnedProjectCount})`}
+            color={showPinnedOnly ? 'secondary' : 'default'}
+            variant={showPinnedOnly ? 'filled' : 'outlined'}
+            onClick={() => setShowPinnedOnly((prev) => !prev)}
+            disabled={pinnedProjectCount === 0}
           />
           {tagOptions.map((option) => (
             <Chip
@@ -287,6 +308,14 @@ const Projects = () => {
                       />
                     )}
                     <CardContent sx={{ flexGrow: 1 }}>
+                        {project.pinned && (
+                          <Chip
+                            label="Pinned"
+                            size="small"
+                            color="secondary"
+                            sx={{ mb: 1 }}
+                          />
+                        )}
                         <Typography gutterBottom variant="h5" component="h2">
                             {project.title}
                         </Typography>
@@ -342,7 +371,14 @@ const Projects = () => {
           <Typography variant="body1" color="text.secondary" sx={{ mb: 2 }}>
             No projects match your filters.
           </Typography>
-          <Button variant="outlined" onClick={() => { setSelectedTags([]); setSearchTerm(''); }}>
+          <Button
+            variant="outlined"
+            onClick={() => {
+              setSelectedTags([]);
+              setShowPinnedOnly(false);
+              setSearchTerm('');
+            }}
+          >
             Clear Filters
           </Button>
         </Box>
