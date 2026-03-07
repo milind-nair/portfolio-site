@@ -34,6 +34,7 @@ const navItems = [
   { id: 'blogs', text: 'Blogs', icon: <AutoStoriesIcon />, href: '#blogs' },
   { id: 'contact', text: 'Contact', icon: <EmailIcon />, href: '#contact' },
 ];
+const BRAND_AVATAR_SRC = `${process.env.PUBLIC_URL}/brand-icon.png`;
 
 function Layout(props) {
   const { window, darkMode, toggleDarkMode, children } = props;
@@ -83,10 +84,22 @@ function Layout(props) {
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       <Box sx={{ p: 3, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
         <Avatar 
-          sx={{ width: 80, height: 80, mb: 1, bgcolor: 'primary.main', fontSize: '2rem' }}
-        >
-            {about.name.charAt(0)}
-        </Avatar>
+          src={BRAND_AVATAR_SRC}
+          alt={`${about.name} logo`}
+          imgProps={{ loading: 'lazy' }}
+          sx={{
+            width: 80,
+            height: 80,
+            mb: 1,
+            bgcolor: 'transparent',
+            border: '1px solid',
+            borderColor: 'divider',
+            '& img': {
+              objectFit: 'cover',
+              transform: 'scale(1.04)'
+            }
+          }}
+        />
         <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
             {about.name}
         </Typography>

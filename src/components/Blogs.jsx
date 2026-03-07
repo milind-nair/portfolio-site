@@ -1,8 +1,9 @@
 import React from 'react';
 import { Box, Typography, Container, Grid, Card, CardContent, CardActions, Button, CardMedia } from '@mui/material';
 import { about } from '../constants';
-import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+
+const BLOG_FALLBACK_ICON = 'https://cdn.simpleicons.org/medium/12100E';
 
 const parseBlogDate = (dateLabel = '') => {
   const timestamp = Date.parse(dateLabel);
@@ -65,7 +66,18 @@ const Blogs = () => {
                 >
                     {imageUnavailable ? (
                       <Box sx={{ height: 140, bgcolor: 'secondary.main', opacity: 0.1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                           <AutoStoriesIcon sx={{ fontSize: 60, opacity: 0.5 }} />
+                           <Box
+                             component="img"
+                             src={BLOG_FALLBACK_ICON}
+                             alt="Medium logo"
+                             sx={{
+                               width: 56,
+                               height: 56,
+                               objectFit: 'contain',
+                               opacity: 0.9,
+                               filter: (theme) => theme.palette.mode === 'dark' ? 'invert(1)' : 'none'
+                             }}
+                           />
                       </Box>
                     ) : (
                       <CardMedia
