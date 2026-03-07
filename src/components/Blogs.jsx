@@ -1,9 +1,12 @@
-import { Box, Typography, Container, Grid, Card, CardContent, CardActions, Button } from '@mui/material';
+import React from 'react';
+import { Box, Typography, Container, Grid, Card, CardContent, CardActions, Button, CardMedia } from '@mui/material';
 import { about } from '../constants';
 import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 const Blogs = () => {
+  const [brokenImages, setBrokenImages] = React.useState({});
+
   return (
     <Container maxWidth="lg" id="blogs" sx={{ mb: 10, scrollMarginTop: '100px' }}>
        <Typography 
@@ -21,8 +24,12 @@ const Blogs = () => {
       </Typography>
 
       <Grid container spacing={4}>
-        {about.blogs.map((blog, index) => (
-            <Grid item key={index} xs={12} sm={6} md={4}>
+        {about.blogs.map((blog) => {
+            const blogImage = blog.image;
+            const imageUnavailable = !blogImage || brokenImages[blog.link];
+
+            return (
+            <Grid item key={blog.link} xs={12} sm={6} md={4}>
                  <Card 
                   sx={{ 
                     height: '100%', 
@@ -39,10 +46,22 @@ const Blogs = () => {
                     }
                   }}
                 >
-                    {/* Placeholder for Blog Image if we want one, or just a colored top bar */}
-                    <Box sx={{ height: 140, bgcolor: 'secondary.main', opacity: 0.1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                         <AutoStoriesIcon sx={{ fontSize: 60, opacity: 0.5 }} />
-                    </Box>
+                    {imageUnavailable ? (
+                      <Box sx={{ height: 140, bgcolor: 'secondary.main', opacity: 0.1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                           <AutoStoriesIcon sx={{ fontSize: 60, opacity: 0.5 }} />
+                      </Box>
+                    ) : (
+                      <CardMedia
+                        component="img"
+                        height="140"
+                        image={blogImage}
+                        alt={`${blog.title} cover`}
+                        loading="lazy"
+                        onError={() =>
+                          setBrokenImages((prev) => ({ ...prev, [blog.link]: true }))
+                        }
+                      />
+                    )}
                     
                     <CardContent sx={{ flexGrow: 1 }}>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
@@ -69,7 +88,8 @@ const Blogs = () => {
                     </CardActions>
                 </Card>
             </Grid>
-        ))}
+        );
+        })}
       </Grid>
     </Container>
   );

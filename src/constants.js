@@ -57,36 +57,60 @@ export const about = {
   ],
   blogs: [
     {
-        title: "The Quick Call Tax: Why Your Open Office is Killing Real Work",
-        image: "",
-        link: "https://nairmilind3.medium.com/the-quick-call-tax-why-your-open-office-is-killing-real-work-c2d06ef7fd02",
-        date: "Jan 2, 2026",
-        readTime: "5 min read",
-        snippet: "A practical breakdown of how frequent ad-hoc calls fragment deep work and what teams can do to preserve focused engineering time."
+      title: "How Computers Fake Randomness (and Why It Works)",
+      image: "https://cdn-images-1.medium.com/max/1024/0*w5dV4z9-VSgzDByO",
+      link: "https://medium.com/@nairmilind3/how-computers-fake-randomness-and-why-it-works-11b30492f2e7",
+      date: "Aug 14, 2025",
+      readTime: "8 min read",
+      snippet: "Picture this: You are watching the evening lottery draw on TV, where randomness quietly powers fairness and trust."
     },
     {
-        title: "Why You Probably Don't Need MCPs (Yet)",
-        image: "",
-        link: "https://nairmilind3.medium.com/why-you-probably-dont-need-mcps-yet-441fc731ef6c",
-        date: "Sep 4, 2025",
-        readTime: "4 min read",
-        snippet: "A grounded take on model context protocols and why many teams should prioritize fundamentals before introducing extra architecture."
+      title: "The \"Quick Call\" Tax",
+      image: "https://cdn-images-1.medium.com/max/1024/1*4OKiBeF1R1xzJNNZR67mdA.png",
+      link: "https://medium.com/@nairmilind3/the-quick-call-tax-dac7770c5cf7",
+      date: "Jan 6, 2026",
+      readTime: "5 min read",
+      snippet: "Frequent interruptions seem small, but the hidden context-switching cost can quietly destroy deep engineering work."
     },
     {
-        title: "Beyond the Sudoku: Why Most Coding Interviews Fail to Predict Job Performance",
-        image: "",
-        link: "https://nairmilind3.medium.com/beyond-the-sudoku-why-most-coding-interviews-fail-to-predict-job-performance-b8f59f009f0b",
-        date: "Aug 18, 2025",
-        readTime: "8 min read",
-        snippet: "A critique of puzzle-heavy interviews and a case for hiring loops that better reflect real software engineering work."
+      title: "Why You Probably Don't Need MCPs (Yet)",
+      image: "https://cdn-images-1.medium.com/max/460/1*dvpomnFDptbO0ROgJZ0U_Q.jpeg",
+      link: "https://medium.com/@nairmilind3/why-you-probably-dont-need-mcps-yet-b5c8712d5a92",
+      date: "Sep 4, 2025",
+      readTime: "4 min read",
+      snippet: "If you only have one model and a few tools, simple tool-calling usually beats adding protocol complexity."
     },
     {
-        title: "How Computers Fake Randomness and Why It's Good Enough",
-        image: "",
-        link: "https://nairmilind3.medium.com/how-computers-fake-randomness-and-why-its-good-enough-3e77f2fd65f2",
-        date: "Aug 14, 2025",
-        readTime: "8 min read",
-        snippet: "An accessible explanation of pseudo-randomness, determinism, and why PRNGs are sufficient for most engineering use cases."
+      title: "What's Missing When Nothing Gets Done",
+      image: "https://cdn-images-1.medium.com/max/550/0*Guh9fGPKTm4DRlbi.png",
+      link: "https://medium.com/@nairmilind3/whats-missing-when-nothing-gets-done-33f10da40278",
+      date: "Aug 26, 2025",
+      readTime: "3 min read",
+      snippet: "Agency and ownership together are what move teams from endless discussion to actual execution."
+    },
+    {
+      title: "The $1 Million Math Problem Hiding in Your Morning Sudoku",
+      image: "https://cdn-images-1.medium.com/max/225/1*Yg2_YMzEpsMRH6MFMLxLbA.png",
+      link: "https://medium.com/@nairmilind3/the-1-million-math-problem-hiding-in-your-morning-sudoku-37955b883054",
+      date: "Aug 18, 2025",
+      readTime: "5 min read",
+      snippet: "A beginner-friendly route into the P vs NP problem through the familiar logic of Sudoku."
+    },
+    {
+      title: "Beyond the Sudoku: The Real Computer Science Behind the Million-Dollar Problem",
+      image: "https://cdn-images-1.medium.com/max/640/0*VGDeosLkbqGtXcN6.png",
+      link: "https://medium.com/@nairmilind3/beyond-the-sudoku-the-real-computer-science-behind-the-million-dollar-problem-b7213616bc65",
+      date: "Aug 18, 2025",
+      readTime: "8 min read",
+      snippet: "A deeper technical follow-up on complexity classes, reductions, and why the P vs NP question matters."
+    },
+    {
+      title: "Why You Should Never Rename or Move Files!",
+      image: "https://cdn-images-1.medium.com/max/264/1*7FQZ83-0iGrxuQVRSP48rA.png",
+      link: "https://medium.com/@nairmilind3/why-you-should-never-rename-or-move-files-17bdebfcdf7a",
+      date: "Jul 14, 2023",
+      readTime: "3 min read",
+      snippet: "A practical Git note on preserving history correctly when files are moved or renamed."
     }
   ]
 };
@@ -97,7 +121,7 @@ export const projects = [
     description: "CLI tool to generate stateful mock servers from OpenAPI specifications, with hot reloading and traffic replay capabilities.",
     tags: ["Node.js", "OpenAPI", "Developer Tooling"],
     image: "https://source.unsplash.com/random/800x600?api,server",
-    codeUrl: "",
+    codeUrl: "https://github.com/milind-nair/mock-gen",
     demoUrl: "",
     details: {
       summary: "Developer-focused CLI that accelerates API-first workflows by generating realistic mock APIs directly from OpenAPI specs.",
@@ -121,7 +145,7 @@ export const projects = [
     description: "Python tool that converts natural language system descriptions into UML diagrams using LangChain and PlantUML.",
     tags: ["Python", "LangChain", "PlantUML"],
     image: "https://source.unsplash.com/random/800x600?uml,diagram",
-    codeUrl: "",
+    codeUrl: "https://github.com/milind-nair/uml-generator",
     demoUrl: "",
     details: {
       summary: "NLP-assisted UML generation utility designed to speed up early design documentation from plain English input.",
@@ -210,6 +234,30 @@ export const projects = [
         "Structuring prompts for consistent recommendations"
       ],
       architecture: "Client UI interacts with backend inference logic that orchestrates prompt construction and model responses for outfit generation."
+    }
+  },
+  {
+    title: "Portfolio Site",
+    description: "Personal portfolio website with recruiter/dev views, project search, and live profile integrations.",
+    tags: ["React", "MUI", "Portfolio"],
+    image: "https://source.unsplash.com/random/800x600?portfolio,website",
+    codeUrl: "https://github.com/milind-nair/portfolio-site",
+    demoUrl: "https://milind-nair.github.io/portfolio-site",
+    details: {
+      summary: "A single-page portfolio focused on clean storytelling for projects, experience, blogs, and contact.",
+      role: "Designer and developer",
+      impact: "Improved profile clarity for recruiters while preserving technical depth for developer audiences.",
+      stack: ["React", "Material UI", "JavaScript"],
+      features: [
+        "Dual recruiter/developer presentation modes",
+        "Project filters, tags, and detail modal",
+        "Integrated GitHub and Medium profile data"
+      ],
+      challenges: [
+        "Balancing concise recruiter content with technical depth",
+        "Handling missing external preview assets gracefully"
+      ],
+      architecture: "Component-driven React UI with shared constants as the data source and progressive fallbacks for remote previews."
     }
   }
 ];

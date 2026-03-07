@@ -25,6 +25,54 @@ import {
 import { projects } from '../constants';
 import { useMode } from '../context/ModeContext';
 import SearchIcon from '@mui/icons-material/Search';
+import CodeIcon from '@mui/icons-material/Code';
+import HideImageOutlinedIcon from '@mui/icons-material/HideImageOutlined';
+
+const parseGithubRepo = (url = '') => {
+  const match = url.match(/^https?:\/\/github\.com\/([^/]+)\/([^/?#]+)\/?$/i);
+  if (!match) {
+    return null;
+  }
+
+  return {
+    owner: match[1],
+    repo: match[2].replace(/\.git$/i, '')
+  };
+};
+
+const getGithubPreviewUrl = (codeUrl) => {
+  const repoInfo = parseGithubRepo(codeUrl);
+  if (!repoInfo) {
+    return null;
+  }
+
+  return `https://opengraph.githubassets.com/portfolio-site/${repoInfo.owner}/${repoInfo.repo}`;
+};
+
+const getProjectCodeAction = (project) => {
+  if (project.codeUrl) {
+    return { label: 'View Code', url: project.codeUrl };
+  }
+
+  return null;
+};
+
+const getProjectPreviewSources = (project) => {
+  const sources = [];
+
+  const githubPreviewUrl = getGithubPreviewUrl(project.codeUrl);
+  if (githubPreviewUrl && !sources.includes(githubPreviewUrl)) {
+    sources.push(githubPreviewUrl);
+  }
+
+  if (project.image && !sources.includes(project.image)) {
+    sources.push(project.image);
+  }
+
+  return sources;
+};
+
+const getProjectKey = (project) => project.codeUrl || project.title;
 
 const Projects = () => {
   const { mode } = useMode();
@@ -32,6 +80,7 @@ const Projects = () => {
   const [searchTerm, setSearchTerm] = React.useState('');
   const [activeProject, setActiveProject] = React.useState(null);
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+  const [previewFailures, setPreviewFailures] = React.useState({});
 
   const tagOptions = React.useMemo(() => {
     const counts = new Map();
@@ -96,6 +145,26 @@ const Projects = () => {
     setIsDialogOpen(false);
   };
 
+  const markPreviewFailure = (project) => {
+    const projectKey = getProjectKey(project);
+    setPreviewFailures((prev) => ({
+      ...prev,
+      [projectKey]: (prev[projectKey] || 0) + 1
+    }));
+  };
+
+  const getCurrentPreviewSource = (project) => {
+    const sources = getProjectPreviewSources(project);
+    return sources[previewFailures[getProjectKey(project)] || 0] || null;
+  };
+
+  const activeProjectCodeAction = activeProject
+    ? getProjectCodeAction(activeProject)
+    : null;
+  const activeProjectPreviewSource = activeProject
+    ? getCurrentPreviewSource(activeProject)
+    : null;
+
   return (
     <Container maxWidth="lg" id="projects" sx={{ mb: 10, scrollMarginTop: '100px' }}>
       <Typography 
@@ -147,8 +216,12 @@ const Projects = () => {
       </Box>
 
       <Grid container spacing={4}>
-        {filteredProjects.map((project) => (
-            <Grid item key={project.title} xs={12} sm={6} md={4}>
+        {filteredProjects.map((project) => {
+            const projectCodeAction = getProjectCodeAction(project);
+            const projectPreviewSource = getCurrentPreviewSource(project);
+
+            return (
+            <Grid item key={getProjectKey(project)} xs={12} sm={6} md={4}>
                 <Card 
                   sx={{ 
                     height: '100%', 
@@ -161,13 +234,38 @@ const Projects = () => {
                     boxShadow: (theme) => theme.palette.mode === 'light' ? '0 8px 32px 0 rgba(31, 38, 135, 0.07)' : '0 8px 32px 0 rgba(0, 0, 0, 0.37)'
                   }}
                 >
-                    <CardMedia
-                      component="img"
-                      height="200"
-                      image={project.image}
-                      alt={`${project.title} preview`}
-                      loading="lazy"
-                    />
+                    {!projectPreviewSource ? (
+                      <Box
+                        sx={{
+                          height: 200,
+                          px: 2,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          textAlign: 'center',
+                          background: (theme) =>
+                            theme.palette.mode === 'light'
+                              ? 'linear-gradient(135deg, rgba(42,85,153,0.14), rgba(245,0,87,0.12))'
+                              : 'linear-gradient(135deg, rgba(144,202,249,0.18), rgba(244,143,177,0.16))'
+                        }}
+                      >
+                        <Stack spacing={1} alignItems="center">
+                          <HideImageOutlinedIcon color="action" />
+                          <Typography variant="caption" color="text.secondary">
+                            Preview unavailable
+                          </Typography>
+                        </Stack>
+                      </Box>
+                    ) : (
+                      <CardMedia
+                        component="img"
+                        height="200"
+                        image={projectPreviewSource}
+                        alt={`${project.title} preview`}
+                        loading="lazy"
+                        onError={() => markPreviewFailure(project)}
+                      />
+                    )}
                     <CardContent sx={{ flexGrow: 1 }}>
                         <Typography gutterBottom variant="h5" component="h2">
                             {project.title}
@@ -183,14 +281,15 @@ const Projects = () => {
                     </CardContent>
                     <CardActions sx={{ justifyContent: 'space-between', px: 2, pb: 2 }}>
                         <Box sx={{ display: 'flex', gap: 1 }}>
-                          {project.codeUrl && (
+                          {projectCodeAction && (
                             <Button
                               size="small"
-                              href={project.codeUrl}
+                              href={projectCodeAction.url}
                               target="_blank"
                               rel="noreferrer"
+                              startIcon={<CodeIcon fontSize="small" />}
                             >
-                              View Code
+                              {projectCodeAction.label}
                             </Button>
                           )}
                           {project.demoUrl && (
@@ -214,7 +313,8 @@ const Projects = () => {
                     </CardActions>
                 </Card>
             </Grid>
-        ))}
+        );
+        })}
       </Grid>
 
       {filteredProjects.length === 0 && (
@@ -239,14 +339,40 @@ const Projects = () => {
         <DialogContent dividers>
           {activeProject ? (
             <Stack spacing={2}>
-              <CardMedia
-                component="img"
-                height="240"
-                image={activeProject.image}
-                alt={`${activeProject.title} preview`}
-                loading="lazy"
-                sx={{ borderRadius: 2 }}
-              />
+              {!activeProjectPreviewSource ? (
+                <Box
+                  sx={{
+                    height: 240,
+                    borderRadius: 2,
+                    px: 2,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    textAlign: 'center',
+                    background: (theme) =>
+                      theme.palette.mode === 'light'
+                        ? 'linear-gradient(135deg, rgba(42,85,153,0.14), rgba(245,0,87,0.12))'
+                        : 'linear-gradient(135deg, rgba(144,202,249,0.18), rgba(244,143,177,0.16))'
+                  }}
+                >
+                  <Stack spacing={1} alignItems="center">
+                    <HideImageOutlinedIcon color="action" />
+                    <Typography variant="caption" color="text.secondary">
+                      Preview unavailable
+                    </Typography>
+                  </Stack>
+                </Box>
+              ) : (
+                <CardMedia
+                  component="img"
+                  height="240"
+                  image={activeProjectPreviewSource}
+                  alt={`${activeProject.title} preview`}
+                  loading="lazy"
+                  sx={{ borderRadius: 2 }}
+                  onError={() => markPreviewFailure(activeProject)}
+                />
+              )}
 
               <Typography variant="body1">
                 {activeProject.details?.summary || activeProject.description}
@@ -317,13 +443,14 @@ const Projects = () => {
           )}
         </DialogContent>
         <DialogActions>
-          {activeProject?.codeUrl && (
+          {activeProjectCodeAction && (
             <Button
-              href={activeProject.codeUrl}
+              href={activeProjectCodeAction.url}
               target="_blank"
               rel="noreferrer"
+              startIcon={<CodeIcon fontSize="small" />}
             >
-              View Code
+              {activeProjectCodeAction.label}
             </Button>
           )}
           {activeProject?.demoUrl && (
