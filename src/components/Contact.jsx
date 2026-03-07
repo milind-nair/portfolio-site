@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Typography, Container, Paper, Link, IconButton, Tooltip } from '@mui/material';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import TwitterIcon from '@mui/icons-material/Twitter';
+import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import EmailIcon from '@mui/icons-material/Email';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { about } from '../constants';
@@ -92,13 +92,13 @@ const Contact = () => {
                     <LinkedInIcon fontSize="medium" />
                 </IconButton>
             </Tooltip>
-            <Tooltip title="Twitter">
+            <Tooltip title="Medium">
                 <IconButton 
-                    href={about.social.twitter} 
+                    href={about.social.medium} 
                     target="_blank" 
-                    sx={{ p: 2, border: '1px solid', borderColor: 'divider', '&:hover': { color: '#1da1f2', borderColor: '#1da1f2' } }}
+                    sx={{ p: 2, border: '1px solid', borderColor: 'divider', '&:hover': { color: '#000000', borderColor: '#000000' } }}
                 >
-                    <TwitterIcon fontSize="medium" />
+                    <AutoStoriesIcon fontSize="medium" />
                 </IconButton>
             </Tooltip>
         </Box>

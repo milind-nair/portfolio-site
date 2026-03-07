@@ -1,159 +1,215 @@
 export const about = {
   name: "Milind Nair",
-  role: "Full Stack Developer & UI/UX Enthusiast",
-  description: "I build full-stack web applications with a focus on modern user interfaces and robust backend systems. Let's build something amazing together.",
+  role: "Senior Software Engineer | Full-Stack Developer",
+  description: "I build production backend systems and user-facing web applications, with a strong focus on API design, developer tooling, and reliable delivery.",
   bio: [
-    "I'm a Full Stack Developer with a knack for crafting seamless digital experiences. My passion lies in bridging the gap between elegant design and robust engineering. With a strong foundation in both front-end aesthetics and back-end logic, I enjoy tackling complex problems and turning them into intuitive, user-friendly solutions.",
-    "Beyond the code, I'm an avid learner who stays on top of the latest tech trends. Whether it's experimenting with new frameworks, optimizing web performance, or contributing to open-source projects, I'm always looking for ways to grow and improve. When I'm offline, you can catch me exploring the outdoors or brewing the perfect cup of coffee."
+    "I am a full-stack software engineer currently working at Arcesium (D. E. Shaw Group), where I work on API platform initiatives across Java, Python, and C#. My experience spans distributed backend systems, SDK and developer experience improvements, and cloud-native CI/CD workflows.",
+    "I also build open-source tools on GitHub and write about software engineering topics on Medium. My interests include building practical developer tooling, improving system reliability, and turning complex technical ideas into clear, usable solutions."
   ],
   skills: [
-    "React", "Node.js", "TypeScript", "Python", "GraphQL", 
-    "Material UI", "Docker", "AWS", "Git"
+    "Java",
+    "Python",
+    "C#",
+    "TypeScript",
+    "React",
+    "Next.js",
+    "Spring Boot",
+    "Node.js",
+    "Express",
+    "PostgreSQL",
+    "MongoDB",
+    "Docker",
+    "Kubernetes",
+    "GitLab CI/CD"
   ],
   email: "nairmilind3@gmail.com",
   location: "Bengaluru, India",
   social: {
     github: "https://github.com/milind-nair",
-    linkedin: "https://linkedin.com/in/milind-nair",
-    twitter: "https://twitter.com"
+    linkedin: "https://www.linkedin.com/in/milind-nair/",
+    medium: "https://medium.com/@nairmilind3"
   },
   experiences: [
     {
-      company: "Tech Innovators Inc",
-      role: "Senior Full Stack Engineeer",
-      duration: "2023 - Present",
-      description: "Leading a team of 5 developers to build cloud-native applications. Improved system performance by 40%."
+      company: "Arcesium (D. E. Shaw Group)",
+      role: "Senior Software Engineer - API Experience Team",
+      duration: "Jan 2026 - Present",
+      description: "Leading API platform initiatives across Java, Python, and C#, focused on developer experience, consistency, and reliability."
     },
     {
-      company: "Web Solutions Ltd",
-      role: "Full Stack Developer",
-      duration: "2021 - 2023",
-      description: "Developed and maintained multiple client-facing e-commerce platforms using React and Node.js."
+      company: "Arcesium",
+      role: "Software Development Engineer",
+      duration: "Jul 2024 - Dec 2025",
+      description: "Standardized DateTime serialization across Java, Python, and C# (40% fewer timestamp defects), built LLM-driven unit test generation, and developed distributed rate-limiting for p99 latency stability."
+    },
+    {
+      company: "Arcesium",
+      role: "SDE Intern",
+      duration: "Jan 2024 - Jun 2024",
+      description: "Reduced CI/CD pipeline time by 70% through parallelization and workflow redesign, and implemented cross-language SDK contract validation."
+    },
+    {
+      company: "Arcesium",
+      role: "Summer Intern",
+      duration: "Summer 2023",
+      description: "Built an internal full-stack tool using React (TypeScript), Spring Boot, and Node.js."
     }
   ],
   blogs: [
     {
-        title: "Understanding React Server Components",
-        image: "https://miro.medium.com/v2/resize:fit:1400/1*C97L3d8Jc4w5g2P7v3a5pA.png", // Example React image
-        link: "https://medium.com/",
-        date: "Dec 12, 2024",
+        title: "The Quick Call Tax: Why Your Open Office is Killing Real Work",
+        image: "",
+        link: "https://nairmilind3.medium.com/the-quick-call-tax-why-your-open-office-is-killing-real-work-c2d06ef7fd02",
+        date: "Jan 2, 2026",
         readTime: "5 min read",
-        snippet: "A deep dive into how RSCs are changing the way we build web applications."
+        snippet: "A practical breakdown of how frequent ad-hoc calls fragment deep work and what teams can do to preserve focused engineering time."
     },
     {
-        title: "Optimizing Web Performance in 2024",
-        image: "https://miro.medium.com/v2/resize:fit:1400/0*y6hK9p7p5q2r3s8t.jpg", // Placeholder
-        link: "https://medium.com/",
-        date: "Nov 28, 2024",
+        title: "Why You Probably Don't Need MCPs (Yet)",
+        image: "",
+        link: "https://nairmilind3.medium.com/why-you-probably-dont-need-mcps-yet-441fc731ef6c",
+        date: "Sep 4, 2025",
+        readTime: "4 min read",
+        snippet: "A grounded take on model context protocols and why many teams should prioritize fundamentals before introducing extra architecture."
+    },
+    {
+        title: "Beyond the Sudoku: Why Most Coding Interviews Fail to Predict Job Performance",
+        image: "",
+        link: "https://nairmilind3.medium.com/beyond-the-sudoku-why-most-coding-interviews-fail-to-predict-job-performance-b8f59f009f0b",
+        date: "Aug 18, 2025",
         readTime: "8 min read",
-        snippet: "Key strategies for reducing bundle size and improving Core Web Vitals."
+        snippet: "A critique of puzzle-heavy interviews and a case for hiring loops that better reflect real software engineering work."
     },
     {
-        title: "The Future of AI in Software Development",
-        image: "https://miro.medium.com/v2/resize:fit:1400/1*uJ2w_8f8f8j8j8.png", // Placeholder
-        link: "https://medium.com/",
-        date: "Oct 15, 2024",
-        readTime: "6 min read",
-        snippet: "Exploring how LLMs are augmenting the developer workflow, not replacing it."
+        title: "How Computers Fake Randomness and Why It's Good Enough",
+        image: "",
+        link: "https://nairmilind3.medium.com/how-computers-fake-randomness-and-why-its-good-enough-3e77f2fd65f2",
+        date: "Aug 14, 2025",
+        readTime: "8 min read",
+        snippet: "An accessible explanation of pseudo-randomness, determinism, and why PRNGs are sufficient for most engineering use cases."
     }
   ]
 };
 
 export const projects = [
   {
-    title: "E-Commerce Dashboard",
-    description: "A comprehensive dashboard for managing online stores, featuring real-time analytics, inventory management, and order tracking.",
-    tags: ["React", "Material UI", "Recharts"],
-    image: "https://source.unsplash.com/random/800x600?tech,dashboard",
+    title: "Mock Server Generator",
+    description: "CLI tool to generate stateful mock servers from OpenAPI specifications, with hot reloading and traffic replay capabilities.",
+    tags: ["Node.js", "OpenAPI", "Developer Tooling"],
+    image: "https://source.unsplash.com/random/800x600?api,server",
     codeUrl: "",
     demoUrl: "",
     details: {
-      summary: "Operations dashboard for store owners with real-time visibility into sales, inventory, and fulfillment.",
-      role: "Full stack developer",
-      impact: "Reduced manual reporting and enabled faster inventory decisions.",
-      stack: ["React", "Material UI", "Node.js", "PostgreSQL"],
+      summary: "Developer-focused CLI that accelerates API-first workflows by generating realistic mock APIs directly from OpenAPI specs.",
+      role: "Project author and engineer",
+      impact: "Reduced setup time for frontend and integration testing by enabling instant mock endpoints during development.",
+      stack: ["Node.js", "OpenAPI", "JSON Schema Faker"],
       features: [
-        "Live sales and revenue KPIs",
-        "Inventory alerts and reorder thresholds",
-        "Order status tracking and fulfillment workflow"
+        "Stateful CRUD mock endpoints generated from OpenAPI",
+        "Hot reloading during schema updates",
+        "Traffic recording and replay for test scenarios"
       ],
       challenges: [
-        "Efficient aggregation of large order datasets",
-        "Consistent real-time updates without UI jitter"
+        "Generating realistic responses from varied schema patterns",
+        "Maintaining state consistency across repeated requests"
       ],
-      architecture: "Event-driven updates from the order service feed a reporting pipeline cached for fast dashboard reads."
+      architecture: "CLI parses OpenAPI definitions into route handlers and schema-aware response builders, with in-memory state and request inspection support."
     }
   },
   {
-    title: "Social Media App",
-    description: "A fully functional social media application with real-time messaging, post feeds, and user authentication.",
-    tags: ["Node.js", "Socket.io", "MongoDB"],
-    image: "https://source.unsplash.com/random/800x600?tech,social",
+    title: "UML Generator from Natural Language",
+    description: "Python tool that converts natural language system descriptions into UML diagrams using LangChain and PlantUML.",
+    tags: ["Python", "LangChain", "PlantUML"],
+    image: "https://source.unsplash.com/random/800x600?uml,diagram",
     codeUrl: "",
     demoUrl: "",
     details: {
-      summary: "Real-time social app with messaging, feeds, and engagement features.",
-      role: "Full stack developer",
-      impact: "Improved engagement with instant notifications and messaging.",
-      stack: ["Node.js", "Socket.io", "MongoDB", "React"],
+      summary: "NLP-assisted UML generation utility designed to speed up early design documentation from plain English input.",
+      role: "Project author and engineer",
+      impact: "Improved architecture documentation speed for early-stage designs and technical discussions.",
+      stack: ["Python", "LangChain", "PlantUML"],
       features: [
-        "Real-time chat and typing indicators",
-        "Personalized feed and reactions",
-        "User authentication and profiles"
+        "Natural language to diagram conversion pipeline",
+        "PlantUML output generation for easy rendering",
+        "Packaged for reuse and distribution on PyPI"
       ],
       challenges: [
-        "Scaling WebSocket connections",
-        "Delivering low-latency notifications"
+        "Mapping free-form prompts to structured UML semantics",
+        "Improving prompt consistency for repeatable diagram quality"
       ],
-      architecture: "WebSocket gateway handles real-time traffic while REST APIs manage content and profiles."
+      architecture: "Text input is interpreted through an LLM-driven prompt chain, normalized into diagram primitives, and emitted as PlantUML code."
     }
   },
   {
-    title: "Task Management Tool",
-    description: "A productivity tool inspired by Trello, allowing users to organize tasks into boards and lists with drag-and-drop functionality.",
-    tags: ["TypeScript", "React", "Redux"],
-    image: "https://source.unsplash.com/random/800x600?tech,app",
-    codeUrl: "",
+    title: "Spring Cron Expression Translator",
+    description: "JavaScript library that translates Spring Cron expressions into human-readable text.",
+    tags: ["JavaScript", "NPM", "Developer Tooling"],
+    image: "https://source.unsplash.com/random/800x600?scheduler,time",
+    codeUrl: "https://github.com/milind-nair/cron-expression-translator",
     demoUrl: "",
     details: {
-      summary: "Kanban-style task manager with boards, lists, and drag-and-drop interactions.",
-      role: "Front-end developer",
-      impact: "Streamlined team planning with clear task ownership and priorities.",
-      stack: ["TypeScript", "React", "Redux", "Dnd Kit"],
+      summary: "Library focused on making cron schedules understandable by converting six-field Spring cron expressions into plain English.",
+      role: "Project author and maintainer",
+      impact: "Improved readability of scheduler configurations in tools and developer workflows.",
+      stack: ["JavaScript", "Babel", "Jest", "NPM"],
       features: [
-        "Drag-and-drop tasks across columns",
-        "Board templates and quick add",
-        "Due dates and priority tags"
+        "Support for standard Spring cron field rules",
+        "Simple programmatic API for frontend and backend use",
+        "Published package with versioned releases"
       ],
       challenges: [
-        "Maintaining state consistency during drag events",
-        "Optimizing rendering for large boards"
+        "Handling edge cases in cron syntax parsing",
+        "Keeping translated text concise and accurate"
       ],
-      architecture: "State normalized in Redux with memoized selectors to keep drag updates fast."
+      architecture: "Expression parser tokenizes each cron field and maps patterns to deterministic English sentence fragments."
     }
   },
   {
-    title: "Portfolio Website",
-    description: "This very website! Built to showcase my projects and skills with a focus on clean design and performance.",
-    tags: ["React", "MUI", "Portfolio"],
-    image: "https://source.unsplash.com/random/800x600?tech,code",
-    codeUrl: "",
+    title: "AutoSkip Intro",
+    description: "Chrome extension that automatically skips intro scenes on OTT platforms like Netflix, Disney+ Hotstar, and Prime Video.",
+    tags: ["JavaScript", "Chrome Extension", "Automation"],
+    image: "https://source.unsplash.com/random/800x600?streaming,video",
+    codeUrl: "https://github.com/milind-nair/AutoSkip-Intro",
     demoUrl: "",
     details: {
-      summary: "Personal portfolio with recruiter and developer modes for tailored content depth.",
-      role: "Designer and developer",
-      impact: "Clearer storytelling for both technical and non-technical audiences.",
-      stack: ["React", "MUI", "JavaScript"],
+      summary: "Browser extension that detects and triggers skip-intro actions in supported streaming players.",
+      role: "Project author and engineer",
+      impact: "Saves repetitive viewing time by automating frequent manual skip actions.",
+      stack: ["JavaScript", "Chrome Extensions API", "HTML"],
       features: [
-        "Recruiter and developer view modes",
-        "Project highlights with focused CTAs",
-        "Responsive layout with dark mode"
+        "Automatic intro skipping on supported OTT websites",
+        "Simple install flow through Chrome developer mode",
+        "Designed for lightweight runtime behavior"
       ],
       challenges: [
-        "Balancing visual polish with fast load times",
-        "Presenting dense technical info without overwhelm"
+        "Handling differences in player UI behavior across platforms",
+        "Ensuring reliable button detection timing"
       ],
-      architecture: "Single-page layout with shared theme tokens and reusable section components."
+      architecture: "Content scripts observe playback pages and trigger platform-specific skip actions when eligible controls are detected."
+    }
+  },
+  {
+    title: "Fashion AI Chatbot",
+    description: "Conversational fashion outfit generator powered by Generative AI (Llama v2), with frontend and backend components.",
+    tags: ["Python", "Generative AI", "JavaScript"],
+    image: "https://source.unsplash.com/random/800x600?fashion,ai",
+    codeUrl: "https://github.com/milind-nair/fashion-ai-chatbot",
+    demoUrl: "https://milind-nair.github.io/fashion-ai-chatbot/",
+    details: {
+      summary: "Full-stack conversational assistant that suggests outfit ideas based on user preferences.",
+      role: "Project author and engineer",
+      impact: "Demonstrated practical application of GenAI for a consumer-facing recommendation experience.",
+      stack: ["Python", "JavaScript", "HTML", "Llama v2"],
+      features: [
+        "Conversational outfit recommendation flow",
+        "Frontend and backend split for modular development",
+        "Hosted demo for quick experimentation"
+      ],
+      challenges: [
+        "Balancing response quality with latency",
+        "Structuring prompts for consistent recommendations"
+      ],
+      architecture: "Client UI interacts with backend inference logic that orchestrates prompt construction and model responses for outfit generation."
     }
   }
 ];
