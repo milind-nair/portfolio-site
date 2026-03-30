@@ -1,0 +1,196 @@
+[
+  {
+    "title": "Your AI Agent is Burning 10x the Tokens It Needs",
+    "slug": "your-ai-agent-is-burning-10x-the-tokens-it-needs",
+    "path": "/blogs/your-ai-agent-is-burning-10x-the-tokens-it-needs/",
+    "description": "Picture two developers sitting next to each other, both asking their AI coding agent to refactor the same payment service.",
+    "pubDate": "2026-03-24T17:13:43.000Z",
+    "dateLabel": "Mar 24, 2026",
+    "readTime": "12 min read",
+    "coverAlt": "Article illustration",
+    "coverImage": "/blogs/covers/your-ai-agent-is-burning-10x-the-tokens-it-needs.svg",
+    "tags": [
+      "context engineering",
+      "language server protocol",
+      "model context protocol",
+      "claude code"
+    ],
+    "featured": true
+  },
+  {
+    "title": "Learning Observability from Scratch",
+    "slug": "learning-observability-from-scratch",
+    "path": "/blogs/learning-observability-from-scratch/",
+    "description": "A few days ago I watched a video by Arpit Bhayani on Stripe’s canonical log lines . The concept was straightforward enough: Stripe emits one structured log line per request, containing everything relevant to that request. But watching it made me realize I had a gap. I understood what logging was. I use it every day. What I couldn’t confidently explain was where metrics and traces fit in, or why anyone would need them if they already had good logs.",
+    "pubDate": "2026-03-22T19:15:02.000Z",
+    "dateLabel": "Mar 22, 2026",
+    "readTime": "11 min read",
+    "coverAlt": "Article illustration",
+    "coverImage": "/blogs/covers/learning-observability-from-scratch.svg",
+    "tags": [
+      "tracing",
+      "logging",
+      "observability",
+      "metrics"
+    ],
+    "featured": true
+  },
+  {
+    "title": "Why Does AI Keep Saying “It’s Not X, It’s Y”?",
+    "slug": "why-does-ai-keep-saying-its-not-x-its-y",
+    "path": "/blogs/why-does-ai-keep-saying-its-not-x-its-y/",
+    "description": "You’ve seen it. You ask an AI a straightforward question and get back: “It’s not just a tool — it’s a paradigm shift.” You ask it to help you work faster and it pivots to: “It’s not about efficiency; it’s about transformation.” You send a two-line question and get back something that reads like a Series A pitch.",
+    "pubDate": "2026-03-17T19:01:05.000Z",
+    "dateLabel": "Mar 17, 2026",
+    "readTime": "6 min read",
+    "coverAlt": "Article illustration",
+    "coverImage": "/blogs/covers/why-does-ai-keep-saying-its-not-x-its-y.svg",
+    "tags": [
+      "chatgpt",
+      "claude",
+      "llm",
+      "genai"
+    ],
+    "featured": true
+  },
+  {
+    "title": "Amazon Built the Gold Standard for Safe Deployments. Then AI Helped Break It.",
+    "slug": "amazon-built-the-gold-standard-for-safe-deployments-then-ai-helped-break-it",
+    "path": "/blogs/amazon-built-the-gold-standard-for-safe-deployments-then-ai-helped-break-it/",
+    "description": "Amazon’s own playbook describes exactly how to prevent the outages it’s now having.",
+    "pubDate": "2026-03-10T16:45:16.000Z",
+    "dateLabel": "Mar 10, 2026",
+    "readTime": "5 min read",
+    "coverAlt": "Cover image for the article",
+    "coverImage": "/blogs/covers/amazon-built-the-gold-standard-for-safe-deployments-then-ai-helped-break-it.svg",
+    "tags": [],
+    "featured": true
+  },
+  {
+    "title": "The “Quick Call” Tax",
+    "slug": "the-quick-call-tax",
+    "path": "/blogs/the-quick-call-tax/",
+    "description": "You’re deep in a problem that took 40 minutes to load into your head. The pieces are finally connecting. You’ve got your editor, terminal, and documentation all lined up, and you’re in that rare state where the solution path is clear. Then Slack lights up: “Hey, got 5 minutes for a quick call?”",
+    "pubDate": "2026-01-06T20:27:13.000Z",
+    "dateLabel": "Jan 6, 2026",
+    "readTime": "5 min read",
+    "coverAlt": "Article illustration",
+    "coverImage": "/blogs/covers/the-quick-call-tax.svg",
+    "tags": [
+      "developer productivity",
+      "meetings",
+      "organizational culture",
+      "asynchronouscommunication",
+      "productivity"
+    ],
+    "featured": true
+  },
+  {
+    "title": "Why You Probably Don’t Need MCPs (Yet)",
+    "slug": "why-you-probably-dont-need-mcps-yet",
+    "path": "/blogs/why-you-probably-dont-need-mcps-yet/",
+    "description": "Picture this: You’re building an AI app. You want it to check the weather, send emails, maybe query your database.",
+    "pubDate": "2025-09-04T19:47:36.000Z",
+    "dateLabel": "Sep 4, 2025",
+    "readTime": "4 min read",
+    "coverAlt": "Article illustration",
+    "coverImage": "/blogs/covers/why-you-probably-dont-need-mcps-yet.svg",
+    "tags": [
+      "llm",
+      "langchain",
+      "mcp server",
+      "ai",
+      "model context protocol"
+    ],
+    "featured": true
+  },
+  {
+    "title": "What’s Missing When Nothing Gets Done",
+    "slug": "whats-missing-when-nothing-gets-done",
+    "path": "/blogs/whats-missing-when-nothing-gets-done/",
+    "description": "Two words get thrown around a lot in workplace conversations: agency and ownership.",
+    "pubDate": "2025-08-26T20:10:59.000Z",
+    "dateLabel": "Aug 26, 2025",
+    "readTime": "3 min read",
+    "coverAlt": "Article illustration",
+    "coverImage": "/blogs/covers/whats-missing-when-nothing-gets-done.svg",
+    "tags": [
+      "ownership",
+      "team",
+      "agency"
+    ],
+    "featured": false
+  },
+  {
+    "title": "Beyond the Sudoku: The Real Computer Science Behind the Million-Dollar Problem",
+    "slug": "beyond-the-sudoku-the-real-computer-science-behind-the-million-dollar-problem",
+    "path": "/blogs/beyond-the-sudoku-the-real-computer-science-behind-the-million-dollar-problem/",
+    "description": "Alright, so you’ve read about the Sudoku analogy and you get the gist. Solving is hard, checking is easy, million-dollar question, world-changing implications. But now you’re sitting there thinking, “Okay, that’s cute, but what does this actually mean in terms of Big O notation, decision problems, and the algorithms I write every day?”",
+    "pubDate": "2025-08-18T02:42:48.000Z",
+    "dateLabel": "Aug 18, 2025",
+    "readTime": "9 min read",
+    "coverAlt": "Article illustration",
+    "coverImage": "/blogs/covers/beyond-the-sudoku-the-real-computer-science-behind-the-million-dollar-problem.svg",
+    "tags": [
+      "computer science",
+      "p versus np",
+      "mathematics",
+      "algorithms",
+      "millenium problem"
+    ],
+    "featured": false
+  },
+  {
+    "title": "The $1 Million Math Problem Hiding in Your Morning Sudoku",
+    "slug": "the-1-million-math-problem-hiding-in-your-morning-sudoku",
+    "path": "/blogs/the-1-million-math-problem-hiding-in-your-morning-sudoku/",
+    "description": "Picture this: You’re sitting with a newspaper, staring at a blank Sudoku grid. Those 81 empty squares mock you as you try to figure out where each number goes. After 45 minutes of erasing and rewriting, you’re ready to throw in the towel.",
+    "pubDate": "2025-08-18T02:35:10.000Z",
+    "dateLabel": "Aug 18, 2025",
+    "readTime": "5 min read",
+    "coverAlt": "Article illustration",
+    "coverImage": "/blogs/covers/the-1-million-math-problem-hiding-in-your-morning-sudoku.svg",
+    "tags": [
+      "p versus np",
+      "millenium problem",
+      "mathematics",
+      "time complexity",
+      "computer science"
+    ],
+    "featured": false
+  },
+  {
+    "title": "How Computers Fake Randomness (and Why It Works)",
+    "slug": "how-computers-fake-randomness-and-why-it-works",
+    "path": "/blogs/how-computers-fake-randomness-and-why-it-works/",
+    "description": "Picture this: You’re watching the evening lottery draw on TV. The shiny machine tumbles colorful balls around, and one by one, the winning numbers are selected. But what if I told you that those numbers weren’t actually random at all? What if someone could predict exactly which balls would drop, making the entire lottery a sham?",
+    "pubDate": "2025-08-14T10:49:19.000Z",
+    "dateLabel": "Aug 14, 2025",
+    "readTime": "9 min read",
+    "coverAlt": "Article illustration",
+    "coverImage": "/blogs/covers/how-computers-fake-randomness-and-why-it-works.svg",
+    "tags": [
+      "computer science",
+      "randomness",
+      "technology"
+    ],
+    "featured": false
+  },
+  {
+    "title": "Why You Should Never Rename or Move Files!",
+    "slug": "why-you-should-never-rename-or-move-files",
+    "path": "/blogs/why-you-should-never-rename-or-move-files/",
+    "description": "A practical Git note on preserving history correctly when files are moved or renamed.",
+    "pubDate": "2023-07-14T00:00:00.000Z",
+    "dateLabel": "Jul 14, 2023",
+    "readTime": "3 min read",
+    "coverAlt": "A file and folder themed illustration representing Git history",
+    "coverImage": "/blogs/covers/why-you-should-never-rename-or-move-files.svg",
+    "tags": [
+      "git",
+      "version-control",
+      "developer-tooling"
+    ],
+    "featured": false
+  }
+]
