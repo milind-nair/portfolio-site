@@ -1,0 +1,61 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from './BaseLayout.astro';
+import Giscus from '../components/Giscus.astro';
+import TagList from '../components/TagList.astro';
+import { formatDate, postPath } from '../lib/posts';
+
+const { post } = Astro.props;
+const canonical = post.data.canonicalURL ?? `https://milindnair.com${postPath(post)}`;
+---
+
+<BaseLayout
+  title={`${post.data.title} | Milind Nair`}
+  description={post.data.description}
+  canonical={canonical}
+  image={`/blogs/covers/${post.id}.svg`}
+  headerVariant="compact"
+>
+  <article class="space-y-8">
+    <section class="border-b border-slate-900/10 pb-8">
+      <div class="space-y-5">
+        <div class="space-y-4">
+          <h1 class="m-0 max-w-4xl text-[2.65rem] font-semibold leading-[0.94] tracking-[-0.07em] text-ink md:text-[5.1rem]">
+            {post.data.title}
+          </h1>
+          <p class="reading-copy m-0 max-w-3xl text-[1.12rem] text-slate-600 md:text-[1.26rem]">
+            {post.data.description}
+          </p>
+        </div>
+        <div class="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-slate-500">
+          <span>{formatDate(post.data.pubDate)}</span>
+          <span class="font-semibold text-accent">{post.data.readTime}</span>
+          {post.data.mediumURL && (
+            <a href={post.data.mediumURL} target="_blank" rel="noreferrer">
+              Originally published on Medium
+            </a>
+          )}
+        </div>
+        <TagList tags={post.data.tags} />
+      </div>
+    </section>
+
+    <div class="panel overflow-hidden rounded-[1.6rem] bg-slate-50/70 p-4 md:p-6">
+      <Image
+        src={post.data.coverImage}
+        alt={post.data.coverAlt}
+        widths={[720, 960, 1440]}
+        sizes="(min-width: 1024px) 72rem, 100vw"
+        class="h-auto max-h-[34rem] w-full object-contain"
+      />
+    </div>
+
+    <div class="panel rounded-[1.6rem] px-6 py-8 md:px-10 md:py-10">
+      <div class="article-content">
+        <slot />
+      </div>
+    </div>
+
+    <Giscus />
+  </article>
+</BaseLayout>

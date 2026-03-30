@@ -1,0 +1,182 @@
+---
+title: "Learning Observability from Scratch"
+description: "A few days ago I watched a video by Arpit Bhayani on Stripe’s canonical log lines . The concept was straightforward enough: Stripe emits one structured log line per request, containing everything relevant to that request. But watching it made me realize I had a gap. I understood what logging was. I use it every day. What I couldn’t confidently explain was where metrics and traces fit in, or why anyone would need them if they already had good logs."
+pubDate: "2026-03-22T19:15:02.000Z"
+updatedDate: "2026-03-22T19:38:15.081Z"
+tags: ["tracing","logging","observability","metrics"]
+coverImage: "../../assets/blog/learning-observability-from-scratch/cover.svg"
+coverAlt: "Article illustration"
+draft: false
+readTime: "11 min read"
+canonicalURL: "https://milindnair.com/blogs/learning-observability-from-scratch/"
+mediumURL: "https://medium.com/@nairmilind3/learning-observability-from-scratch-c36d9771003b"
+featured: true
+---
+import figure1 from '../../assets/blog/learning-observability-from-scratch/figure-1.svg';
+
+> Originally published on [Medium](https://medium.com/@nairmilind3/learning-observability-from-scratch-c36d9771003b). This version is now archived under `/blogs`.
+
+<h3>Learning Observability from Scratch: Logs, Metrics, and Traces</h3><h3>Why I Started Looking Into This</h3><p>A few days ago I watched a video by Arpit Bhayani on Stripe’s <a href="https://youtu.be/9XJtEzmzG3g?si=y-kPiD1kNF4OiHp5">canonical log lines</a>. The concept was straightforward enough: Stripe emits one structured log line per request, containing everything relevant to that request. But watching it made me realize I had a gap. I understood what logging was. I use it every day. What I couldn’t confidently explain was where metrics and traces fit in, or why anyone would need them if they already had good logs.</p><p>So I spent two days trying to answer that question properly. This post documents that process, written in the spirit of thinking out loud rather than explaining from authority.</p><p>The question I started with: <strong>if I already have logs, why do I need anything else?</strong></p><h3>My Initial Mental Model</h3><p>Before I looked anything up, here’s roughly what I believed.</p><p><strong>Logs</strong> were something I understood. Every interesting event gets logged. When something breaks, you find the relevant request_id and grep through lines until you reconstruct what happened.</p><p><strong>Metrics</strong> were aggregated numbers computed by the provider, like a count of requests or average latency. I knew something in the background was aggregating data, but I had no clear picture of what the application itself was actually sending.</p><p><strong>Traces</strong> were the toughest to explain. I assumed they were similar to logs, maybe richer or more structured, possibly useful for distributed systems. I honestly couldn’t have explained what a trace actually looked like or how it got produced.</p><h3>Question 1: Aren’t Logs Enough?</h3><p>Shouldn’t logs be sufficient for most debugging scenarios? You get a bug report, you find the request_id, you search across your log aggregator, and you stitch together what happened line by line. What could possibly go wrong??</p><p>Consider a real scenario: a user reports that their payment is hanging. You search for their request_id and find 40 log lines spread across three services.</p>
+
+```text
+# api-gateway logs
+INFO  request_id=abc123  POST /payments  user_id=u789
+
+# payment-service logs
+INFO  request_id=abc123  charging card  amount=49.99
+ERROR request_id=abc123  payment_provider timeout after 580ms
+
+# notification-service logs
+(nothing)
+```
+
+<p>The API gateway logged the request received. The payment service logged the charge attempt. The notification service logged nothing, which suggests it never got called. The flow broke somewhere in between. You eventually find the culprit, but it took 20 minutes of searching, filtering, and cross-referencing.</p><p>This works until it doesn’t. With enough services and enough traffic, log volume becomes a serious problem. Correlating a request across five services requires matching IDs across multiple search queries. Plus if a request took 800ms, logs will tell you what happened but not where the time went.</p><p><strong>Why can’t I just log every duration? </strong>You <strong><em>can </em></strong>technically log durations, but you only add them where you think to add them. Nobody logs every function call. So when a slow request comes in and the culprit is a database query three levels deep inside a service you didn’t write last month, the timing data you need probably isn’t there.</p><p>Traces partially solve this through auto-instrumentation: libraries like OpenTelemetry hook into your HTTP framework, database client, and outgoing HTTP calls automatically, so timing coverage for common infrastructure operations is there by default rather than by intention. You still instrument custom business logic manually, but the skeleton is covered without thinking about it.</p><h3>Question 2: What Exactly Is a Metric?</h3><p>I knew metrics were aggregated by the provider. The part I was unclear on was what the application was actually sending before that aggregation happened. So I looked it up, and the answer was simpler than I expected.</p><p>When a request comes in, the application calls something like request_count.increment(). When a database query finishes, it calls db_latency.record(142). These are raw measurements pushed from application code to the metrics backend. The backend then aggregates across time windows: requests per second over the last five minutes, p99 latency over the last hour, and so on.</p>
+
+```text
+def process_payment(amount, user_id):
+    metrics.increment("payment_attempt", tags=["env:prod"])
+
+    start = time.now()
+    result = payment_provider.charge(amount, user_id)
+    duration = time.now() - start
+
+    metrics.record("payment_latency", duration, tags=["env:prod"])
+
+    if result.success:
+        metrics.increment("payment_success")
+    else:
+        metrics.increment("payment_failure", tags=[f"reason:{result.error}"])
+```
+
+<p>Take the payment example. Your application emits payment_attempt.increment() on every charge attempt and payment_latency.record(duration) when the attempt completes. In your Datadog dashboard, you see a spike in p99 payment latency at 2:14am. You didn't log that pattern. The metric surfaced it by aggregating thousands of data points you'd never look at individually.</p><p>The tradeoff is that a metric carries almost no context about any specific request. It’s a number, a label, and a timestamp. Useful for spotting that something is wrong, but not for understanding what happened in any individual case.</p><h3>Question 3: What The Hell Is a Trace?</h3><p>A trace represents the lifecycle of a single request as it moves through a system. Within that trace, each unit of work is called a <strong>span</strong>. A span has a start time, a duration, and metadata about what that piece of work was doing.</p><p><strong>Does one service send the full trace?</strong> The answer is no. Take the same payment flow. When the request hits the API gateway, it starts a span and generates a trace_id. When it calls the payment service, it passes that trace_id in the request headers. The payment service starts its own span, attaches the same trace_id, and passes it along when it calls the notification service. Each service emits only its own span. The tracing backend collects all of them and reconstructs the full picture by joining on trace_id.</p>
+
+```text
+# Span emitted by API Gateway
+{
+  trace_id:  "xyz789",
+  span_id:   "span_001",
+  parent_id: null,
+  name:      "api_gateway.handle_request",
+  start:     "12:01:00.100",
+  end:       "12:01:00.903",
+}
+
+# Span emitted by Payment Service
+{
+  trace_id:  "xyz789",
+  span_id:   "span_002",
+  parent_id: "span_001",          # child of api_gateway span
+  name:      "payment.charge_card",
+  start:     12:01:00.112,
+  end:       12:01:00.900,
+}
+# Span emitted by Notification Service
+{
+  trace_id:  "xyz789",
+  span_id:   "span_003",
+  parent_id: "span_002",          # child of payment span
+  name:      "notification.send_email",
+  start:     12:01:00.872,
+  end:       12:01:00.900,
+}
+# Three spans, three services, one trace_id
+# Backend joins them → full trace reconstructed
+```
+
+<p>The trace is assembled from fragments emitted independently across services, not reported as a complete unit by any one component.</p><h3>Question 4: What Does a Trace Actually Look Like?</h3><p>Understanding the mechanics of how a trace gets assembled was one thing. What I couldn’t picture yet was what you actually see when you open a trace in a tool like Jaeger or Datadog.</p><p>In a tracing UI, a trace appears as a waterfall diagram: a timeline of spans, each shown as a horizontal bar, nested to reflect parent-child relationships. You can see which spans ran sequentially and which ran in parallel. You can click into any span to see its attributes, errors, or attached log lines.</p><p>Going back to the 800ms payment request: the waterfall breaks it down as 12ms in the API gateway, 180ms in the payment service, 580ms in a third-party payment provider call, and 28ms in the notification service. The slow third-party call jumps out immediately. You didn’t have to stitch this together from logs or write a query across five systems.</p>
+
+```text
+Trace: POST /payments  (total: 800ms)
+│
+├── api_gateway.handle_request          12ms  ████
+│   │
+│   └── payment.charge_card            768ms  ████████████████████████████
+│       │
+│       ├── db.fetch_user                8ms  ██
+│       ├── provider.charge_card       580ms  ████████████████████  ← bottleneck
+│       │     error: timeout, retry_count=3
+│       └── notification.send_email     28ms  ████
+```
+
+<h3>Question 5: Why Not Just Use Logs and Metrics?</h3><p>You really can !!</p><p>A single service with moderate traffic and straightforward request flows doesn’t need traces. Metrics tell you when something is wrong, and logs with a request_id let you reconstruct what happened. Most teams start here, and it's a reasonable place to start.</p><p>The model starts straining when the system grows:</p><p>The first is <strong>reconstructing flow across services</strong>. With logs, you filter by request_id across multiple systems, sort results, and mentally rebuild the execution order. Parallel calls make this worse: if service A calls B and C simultaneously and the request is slow, the log lines are interleaved and it's hard to tell which call was the bottleneck.</p>
+
+```text
+# What logs look like for parallel calls
+12:01:00.100  request_id=abc  service_a  calling B and C in parallel
+12:01:00.102  request_id=abc  service_c  started
+12:01:00.103  request_id=abc  service_b  started
+12:01:00.153  request_id=abc  service_b  done         # 50ms
+12:01:00.902  request_id=abc  service_c  done         # 800ms  ← but you have to compute this
+12:01:00.903  request_id=abc  service_a  done
+
+# What the trace shows you instead
+service_a  [===========================================]  803ms
+  service_b  [===]  50ms
+  service_c  [========================================]  800ms  ← bottleneck, obvious
+```
+
+<p>A trace gives you a tree structure that shows B took 50ms and C took 800ms, without any manual assembly.</p><p>The second is <strong>timing</strong>. Logs can tell you a DB call started and ended, but you compute the duration yourself, and you can’t easily aggregate that across thousands of requests. Traces record duration per span automatically and surface the critical path, the chain of calls that actually drove the latency.</p><p>The third is <strong>causality</strong>. Logs give you correlated events tied together by a shared ID, but correlation is not the same as causation. Take a cascading failure: service A calls B, B calls C, C starts timing out, B retries and floods A with slow responses. Your logs might look like this:</p>
+
+```text
+service_a  ERROR  request_id=abc  downstream timeout
+service_b  ERROR  request_id=abc  retrying request to C  (attempt 2)
+service_b  ERROR  request_id=abc  retrying request to C  (attempt 3)
+service_c  ERROR  request_id=abc  database connection pool exhausted
+```
+
+<p>All four lines share the same request_id, so you know they're related. But you have to reason out the order of causation yourself: did A fail because B was slow? Did B retry because C timed out? Did C exhaust its pool because B was hammering it with retries? A trace encodes that structure directly. B's span is a child of A's span. C's span is a child of B's. The retry spans from B are siblings with a sequence. The tree tells you: A called B, B called C, C failed, B retried three times, A gave up. During an incident, the difference between forming a hypothesis from logs and reading a map from a trace is the difference between 40 minutes and 5.</p><p>The payment debugging example from earlier shows all three at once. The Datadog alert (metric) tells you something is wrong. The trace waterfall tells you the third-party provider call took 580ms and was the bottleneck. The log line attached to that span tells you it hit a timeout and retried three times. Each signal does something the others can’t.</p><h3>Question 6: What Does My Application Actually Emit?</h3><p>Once I had the concepts clearer, I wanted to understand what application code actually sends in each case, because the abstractions felt similar on the surface.</p><p>For metrics, the application sends small, standalone data points with no lifecycle. Each measurement is independent, with no start or end.</p>
+
+```text
+# Metrics: fire and forget, no lifecycle
+metrics.increment("payment_count")
+metrics.record("db_query_duration", 42)
+```
+
+<p>For traces, the application opens a span when work begins and closes it when work ends. The span records the full duration and any attributes added during execution. Context propagation happens in the HTTP client layer, often automatically.</p>
+
+```text
+# Traces: lifecycle matters, context propagates
+with tracer.start_span("charge_card") as span:
+    span.set_attribute("user_id", user_id)
+    span.set_attribute("amount", amount)
+    result = payment_provider.charge(amount)  # trace_id forwarded automatically
+    span.set_attribute("provider_response", result.status)
+# span closes here, duration recorded, sent to backend
+```
+
+<p>For logs, the application emits discrete events at a point in time. A log line has no inherent relationship to other log lines unless you explicitly inject a trace_id or request_id to connect them, which is why structured logging matters.</p>
+
+```text
+# Logs: point-in-time events, manual correlation
+logger.info("payment attempted", extra={
+    "request_id": request_id,
+    "trace_id": current_trace_id(),   # injected manually
+    "user_id": user_id,
+    "amount": amount
+})
+```
+
+<h3>Bringing It Back: Stripe’s Canonical Log Lines</h3><p>With this context, Stripe’s approach makes more sense. Instead of emitting dozens of scattered log lines per request, Stripe emits one rich, structured log line at the end of each request, capturing the full context of what happened.</p>
+
+```text
+{
+  "timestamp": "2024-01-15T02:14:32Z",
+  "request_id": "req_abc123",
+  "method": "POST",
+  "path": "/v1/charges",
+  "user_id": "u789",
+  "duration_ms": 800,
+  "status": 500,
+  "error_code": "payment_provider_timeout",
+  "retry_count": 3,
+  "amount": 4999,
+  "currency": "usd"
+}
+```
+
+<p>This solves the scatter problem from Question 1 while giving the metrics layer enough information to derive aggregates without a separate instrumentation path. The canonical log line sits between logs and metrics: structured enough to query like metrics, detailed enough to debug like logs. It doesn’t replace traces for understanding distributed latency across services, but it reduces the overhead of maintaining separate logging and metrics systems for single-service request flows.</p><h3>Open Questions</h3><p>A few things I’m still thinking through.</p><ol><li>Does moving more structured emission into application code increase overhead per request, and how significant is that at Stripe’s scale?</li><li>If traces already carry per-request detail, why maintain a separate metrics pipeline rather than deriving metrics from trace data?</li><li>How does trace context propagation work reliably in async or event-driven systems where there’s no clean request-response boundary?</li></ol><p>I don’t have clean answers to these yet, but they feel like the right next layer of questions.</p><h3>Closing Thoughts</h3><p>Two days ago I couldn’t have explained what a span was or how a trace gets assembled. I now have a nice working mental model: logs for event detail, metrics for aggregate health, traces for request lifecycle across services.</p><p>There are details I’ve glossed over, and some of my current understanding will likely get refined as I work with these tools more directly. If you’ve been thinking about observability with similar confusion, I’d be curious what questions you’re still sitting with.</p>
+
+<figure>
+  <img src={figure1.src} alt="Article illustration" loading="lazy" />
+  <figcaption>I asked Gemini, ChatGPT and Claude to create a nice infographic on this. I started out with a Venn diagram but all 3 tools are really really horrible at Venn diagrams. Makes you think where we are with respect to image generation capabilities, but that sounds like content for another blog ;)</figcaption>
+</figure>

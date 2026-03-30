@@ -1,0 +1,186 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+    --page-bg: #f6f3ec;
+    --page-bg-accent: rgba(32, 74, 140, 0.08);
+    --page-bg-warm: rgba(182, 92, 43, 0.08);
+    --surface: rgba(255, 255, 255, 0.8);
+    --surface-strong: rgba(255, 253, 249, 0.96);
+    --border: rgba(16, 32, 51, 0.1);
+    --text-main: #16263b;
+    --text-muted: #5d6877;
+    --link: #204a8c;
+    --link-hover: #9d4028;
+    --font-display: "Avenir Next", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    --font-body: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", "Constantia", Georgia, serif;
+    --shadow-soft: 0 18px 46px rgba(15, 23, 42, 0.08);
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+      radial-gradient(circle at top left, var(--page-bg-accent), transparent 34rem),
+      radial-gradient(circle at bottom right, var(--page-bg-warm), transparent 26rem),
+      var(--page-bg);
+    color: var(--text-main);
+    font-family: var(--font-display);
+    line-height: 1.65;
+    text-rendering: optimizeLegibility;
+  }
+
+  a {
+    color: var(--link);
+    text-decoration-thickness: 0.08em;
+    text-underline-offset: 0.18em;
+  }
+
+  a:hover {
+    color: var(--link-hover);
+  }
+
+  img {
+    max-width: 100%;
+    display: block;
+  }
+
+  ::selection {
+    background: rgba(42, 85, 153, 0.16);
+  }
+}
+
+@layer components {
+  .shell {
+    @apply mx-auto w-full max-w-6xl px-6 py-10 md:px-10 md:py-12;
+  }
+
+  .panel {
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 253, 249, 0.84)),
+      var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-soft);
+    backdrop-filter: blur(10px);
+  }
+
+  .eyebrow {
+    @apply inline-flex items-center rounded-full px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.24em];
+    background: rgba(32, 74, 140, 0.08);
+    color: var(--link);
+  }
+
+  .reading-copy {
+    font-family: var(--font-body);
+    font-size: clamp(1.03rem, 0.98rem + 0.22vw, 1.2rem);
+    line-height: 1.78;
+    letter-spacing: 0.002em;
+    color: var(--text-muted);
+  }
+
+  .article-content {
+    @apply mx-auto;
+    max-width: 76ch;
+    font-family: var(--font-body);
+    font-size: clamp(1.08rem, 1.02rem + 0.24vw, 1.24rem);
+    line-height: 1.92;
+    letter-spacing: 0.003em;
+  }
+
+  .article-content :where(h2, h3, h4) {
+    @apply mt-14 text-ink;
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 1.08;
+  }
+
+  .article-content h2 {
+    @apply text-[2rem];
+  }
+
+  .article-content h3 {
+    @apply text-[1.55rem];
+  }
+
+  .article-content h4 {
+    @apply text-[1.2rem];
+  }
+
+  .article-content p,
+  .article-content ol,
+  .article-content ul,
+  .article-content blockquote {
+    @apply my-6;
+    color: var(--text-main);
+  }
+
+  .article-content ol,
+  .article-content ul {
+    padding-left: 1.35rem;
+  }
+
+  .article-content li + li {
+    margin-top: 0.7rem;
+  }
+
+  .article-content strong {
+    color: #0d1d31;
+    font-weight: 700;
+  }
+
+  .article-content blockquote {
+    @apply rounded-[1.5rem] px-6 py-5 italic;
+    background: rgba(32, 74, 140, 0.06);
+    border: 1px solid rgba(32, 74, 140, 0.1);
+  }
+
+  .article-content code {
+    @apply rounded px-1.5 py-0.5 text-[0.88em];
+    background: rgba(15, 23, 42, 0.08);
+  }
+
+  .article-content pre {
+    @apply overflow-x-auto rounded-[1.5rem] p-5;
+    background: #0f172a;
+    color: #e2e8f0;
+  }
+
+  .article-content pre code {
+    background: transparent;
+    padding: 0;
+  }
+
+  .article-content figure {
+    @apply my-10 overflow-hidden rounded-[1.5rem];
+    background: var(--surface-strong);
+    border: 1px solid var(--border);
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+  }
+
+  .article-content figure img {
+    width: 100%;
+  }
+
+  .article-content figcaption {
+    @apply px-5 py-4 text-sm;
+    color: var(--text-muted);
+    font-family: var(--font-display);
+  }
+
+  .article-content hr {
+    @apply my-10 border-0;
+    border-top: 1px solid rgba(15, 23, 42, 0.12);
+  }
+}

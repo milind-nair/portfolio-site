@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BlogCard from '../components/BlogCard.astro';
+import { BLOG_DESCRIPTION, getPublishedPosts } from '../lib/posts';
+
+const posts = await getPublishedPosts();
+---
+
+<BaseLayout title="Milind Nair | Blogs" description={BLOG_DESCRIPTION}>
+  <section class="space-y-8">
+    <div class="space-y-4">
+      <h2 class="m-0 text-[1rem] font-semibold tracking-[-0.03em] text-slate-700 md:text-[1.15rem]">
+        Latest essays
+      </h2>
+      <p class="reading-copy m-0 max-w-3xl text-[1.05rem] text-slate-600 md:text-[1.12rem]">
+        Practical notes on reliability, AI workflows, developer tooling, and the kind of lessons
+        that become more useful once they are written down clearly.
+      </p>
+    </div>
+
+    <div class="space-y-6">
+      {posts.map((post) => (
+        <BlogCard post={post} />
+      ))}
+    </div>
+  </section>
+</BaseLayout>

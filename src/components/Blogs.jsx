@@ -3,26 +3,83 @@ import { Box, Typography, Container, Grid, Card, CardContent, CardActions, Butto
 import { about } from '../constants';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
-const BLOG_FALLBACK_ICON = 'https://cdn.simpleicons.org/medium/12100E';
+const BLOG_FALLBACK_ICON = `${process.env.PUBLIC_URL}/brand-icon.png`;
+const BLOG_METADATA_URL = '/blogs/posts.json';
 
 const parseBlogDate = (dateLabel = '') => {
   const timestamp = Date.parse(dateLabel);
   return Number.isNaN(timestamp) ? 0 : timestamp;
 };
 
+const fallbackBlogs = about.blogs.map((blog) => ({
+  title: blog.title,
+  coverImage: blog.image,
+  coverAlt: `${blog.title} cover`,
+  path: blog.link,
+  dateLabel: blog.date,
+  readTime: blog.readTime,
+  description: blog.snippet,
+  external: true,
+}));
+
 const Blogs = () => {
   const [brokenImages, setBrokenImages] = React.useState({});
-  const sortedBlogs = React.useMemo(
-    () =>
-      [...about.blogs].sort((a, b) => {
-        const byDate = parseBlogDate(b.date) - parseBlogDate(a.date);
-        if (byDate !== 0) {
-          return byDate;
+  const [blogs, setBlogs] = React.useState(fallbackBlogs);
+
+  React.useEffect(() => {
+    let active = true;
+
+    const loadBlogs = async () => {
+      try {
+        const response = await fetch(BLOG_METADATA_URL, { headers: { Accept: 'application/json' } });
+        if (!response.ok) {
+          throw new Error(`Failed to load blog metadata (${response.status})`);
         }
 
-        return a.title.localeCompare(b.title);
-      }),
-    []
+        const data = await response.json();
+        if (!active || !Array.isArray(data) || data.length === 0) {
+          return;
+        }
+
+        setBlogs(
+          data.map((blog) => ({
+            title: blog.title,
+            coverImage: blog.coverImage,
+            coverAlt: blog.coverAlt || `${blog.title} cover`,
+            path: blog.path || `/blogs/${blog.slug}/`,
+            dateLabel: blog.dateLabel || blog.pubDate,
+            readTime: blog.readTime,
+            description: blog.description,
+            external: false,
+          }))
+        );
+      } catch (error) {
+        if (active) {
+          setBlogs(fallbackBlogs);
+        }
+      }
+    };
+
+    loadBlogs();
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const sortedBlogs = React.useMemo(
+    () =>
+      [...blogs]
+        .sort((a, b) => {
+          const byDate = parseBlogDate(b.dateLabel) - parseBlogDate(a.dateLabel);
+          if (byDate !== 0) {
+            return byDate;
+          }
+
+          return a.title.localeCompare(b.title);
+        })
+        .slice(0, 6),
+    [blogs]
   );
 
   return (
@@ -43,11 +100,11 @@ const Blogs = () => {
 
       <Grid container spacing={4}>
         {sortedBlogs.map((blog) => {
-            const blogImage = blog.image;
-            const imageUnavailable = !blogImage || brokenImages[blog.link];
+            const blogImage = blog.coverImage;
+            const imageUnavailable = !blogImage || brokenImages[blog.path];
 
             return (
-            <Grid item key={blog.link} xs={12} sm={6} md={4}>
+            <Grid item key={blog.path} xs={12} sm={6} md={4}>
                  <Card 
                   sx={{ 
                     height: '100%', 
@@ -69,13 +126,12 @@ const Blogs = () => {
                            <Box
                              component="img"
                              src={BLOG_FALLBACK_ICON}
-                             alt="Medium logo"
+                             alt="Blog logo"
                              sx={{
                                width: 56,
                                height: 56,
                                objectFit: 'contain',
-                               opacity: 0.9,
-                               filter: (theme) => theme.palette.mode === 'dark' ? 'invert(1)' : 'none'
+                               opacity: 0.9
                              }}
                            />
                       </Box>
@@ -84,24 +140,24 @@ const Blogs = () => {
                         component="img"
                         height="140"
                         image={blogImage}
-                        alt={`${blog.title} cover`}
+                        alt={blog.coverAlt}
                         loading="lazy"
                         onError={() =>
-                          setBrokenImages((prev) => ({ ...prev, [blog.link]: true }))
+                          setBrokenImages((prev) => ({ ...prev, [blog.path]: true }))
                         }
                       />
                     )}
                     
                     <CardContent sx={{ flexGrow: 1 }}>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                            <Typography variant="caption" color="text.secondary">{blog.date}</Typography>
+                            <Typography variant="caption" color="text.secondary">{blog.dateLabel}</Typography>
                             <Typography variant="caption" color="primary" fontWeight="bold">{blog.readTime}</Typography>
                         </Box>
                         <Typography gutterBottom variant="h5" component="h2" fontWeight="bold">
                             {blog.title}
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
-                            {blog.snippet}
+                            {blog.description}
                         </Typography>
                     </CardContent>
                     
@@ -109,10 +165,11 @@ const Blogs = () => {
                         <Button 
                             size="small" 
                             endIcon={<ArrowForwardIcon />} 
-                            href={blog.link}
-                            target="_blank"
+                            href={blog.path}
+                            target={blog.external ? '_blank' : undefined}
+                            rel={blog.external ? 'noreferrer' : undefined}
                         >
-                            Read on Medium
+                            {blog.external ? 'Read on Medium' : 'Read article'}
                         </Button>
                     </CardActions>
                 </Card>
@@ -120,6 +177,12 @@ const Blogs = () => {
         );
         })}
       </Grid>
+
+      <Box sx={{ mt: 5, display: 'flex', justifyContent: 'center' }}>
+        <Button href="/blogs/" variant="outlined" endIcon={<ArrowForwardIcon />}>
+          View all posts
+        </Button>
+      </Box>
     </Container>
   );
 };

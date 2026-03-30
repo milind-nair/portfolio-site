@@ -1,0 +1,28 @@
+---
+title: "Why You Should Never Rename or Move Files!"
+description: "A practical Git note on preserving history correctly when files are moved or renamed."
+pubDate: "2023-07-14T00:00:00.000Z"
+tags: ["git","version-control","developer-tooling"]
+coverImage: "../../assets/blog/why-you-should-never-rename-or-move-files/cover.svg"
+coverAlt: "A file and folder themed illustration representing Git history"
+draft: false
+readTime: "3 min read"
+canonicalURL: "https://milindnair.com/blogs/why-you-should-never-rename-or-move-files/"
+mediumURL: "https://medium.com/@nairmilind3/why-you-should-never-rename-or-move-files-17bdebfcdf7a"
+featured: false
+---
+> Originally published on [Medium](https://medium.com/@nairmilind3/why-you-should-never-rename-or-move-files-17bdebfcdf7a). This version is now archived under `/blogs`.
+
+<p>This is one of the earlier pieces in the archive, and it has been preserved here as a short self-hosted edition so the full blog can live under <code>/blogs</code>.</p>
+
+<p>The core lesson still holds: Git tracks content, not your intentions. When a file is renamed or moved, history is only easy to follow when the change is kept clean and the file contents are not simultaneously rewritten beyond recognition.</p>
+
+<h3>The practical habit</h3>
+<p>If a file needs a new name or a new location, make that change separately from large refactors whenever you can. Smaller diffs make history easier to inspect, reduce confusion in code review, and make future archaeology dramatically less painful.</p>
+
+<h3>Why it matters</h3>
+<p>Engineers often discover this the hard way when trying to answer basic questions later: when was this introduced, why was it moved, and what existed before the current structure?</p>
+
+<p>Keeping moves, renames, and substantive code edits distinct gives Git a much better chance of preserving understandable history for your future self and your teammates.</p>
+
+<p>If you want the original publication context, the original Medium post is still available.</p>
