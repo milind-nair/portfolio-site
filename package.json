@@ -13,25 +13,33 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.5.0",
-    "gh-pages": "^6.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "concurrently -k -n SITE,BLOGS -c green,blue \"npm run start:site\" \"npm run start:blogs\"",
+    "start:site": "HOST=127.0.0.1 BROWSER=none react-scripts start",
+    "start:blogs": "npm --prefix apps/blogs run dev -- --port 4321 --host 127.0.0.1 --strictPort",
+    "build": "npm run build:site && npm run build:blogs && npm run copy:blogs",
+    "build:site": "react-scripts build",
+    "build:blogs": "npm --prefix apps/blogs run build",
+    "copy:blogs": "node scripts/copy-blogs.mjs",
+    "import:medium": "node scripts/import-medium-posts.mjs",
+    "import:medium:refresh": "node scripts/import-medium-posts.mjs --refresh",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
       "react-app",
       "react-app/jest"
     ]
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "http-proxy-middleware": "^3.0.5"
   },
   "browserslist": {
     "production": [

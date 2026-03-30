@@ -1,0 +1,102 @@
+---
+import '../styles/global.css';
+import { BLOG_DESCRIPTION, BLOG_TITLE } from '../lib/posts';
+
+interface Props {
+  title?: string;
+  description?: string;
+  canonical?: string;
+  image?: string;
+  headerVariant?: 'hero' | 'compact';
+}
+
+const {
+  title = BLOG_TITLE,
+  description = BLOG_DESCRIPTION,
+  canonical,
+  image = '/brand-icon.png',
+  headerVariant = 'hero',
+} = Astro.props as Props;
+
+const pageCanonical = canonical ?? new URL(Astro.url.pathname, Astro.site).toString();
+const plausibleDomain = import.meta.env.PUBLIC_PLAUSIBLE_DOMAIN;
+const plausibleEnabled =
+  import.meta.env.PUBLIC_PLAUSIBLE_ENABLED !== 'false' && Boolean(plausibleDomain);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={pageCanonical} />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="alternate" type="application/rss+xml" title="Milind Nair Blog RSS" href="/blogs/rss.xml" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={pageCanonical} />
+    <meta property="og:image" content={image.startsWith('http') ? image : `https://milindnair.com${image}`} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={image.startsWith('http') ? image : `https://milindnair.com${image}`} />
+    {plausibleEnabled && (
+      <script
+        defer
+        data-domain={plausibleDomain}
+        src="https://plausible.io/js/script.js"
+      />
+    )}
+  </head>
+  <body>
+    <div class="shell">
+      {
+        headerVariant === 'compact' ? (
+          <header class="mb-8 border-b border-slate-900/10 pb-5 md:mb-10">
+            <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <a class="eyebrow no-underline" href="/">Back To Portfolio</a>
+              <nav class="flex flex-wrap items-center gap-4 text-sm font-semibold text-slate-600">
+                <a href="/blogs/">All posts</a>
+                <a href="/blogs/rss.xml">RSS</a>
+                <a href="https://medium.com/@nairmilind3" target="_blank" rel="noreferrer">
+                  Medium
+                </a>
+              </nav>
+            </div>
+          </header>
+        ) : (
+          <header class="mb-10 border-b border-slate-900/10 pb-8 md:mb-12">
+            <div class="space-y-5">
+              <a class="eyebrow no-underline" href="/">Back To Portfolio</a>
+              <div class="grid gap-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+                <div class="space-y-3">
+                  <p class="m-0 text-[0.72rem] font-semibold uppercase tracking-[0.3em] text-slate-500">
+                    Essays / Notes / Systems Thinking
+                  </p>
+                  <h1 class="m-0 text-[2.35rem] font-semibold tracking-[-0.06em] text-ink md:text-[3.35rem]">
+                    Milind Nair Blog
+                  </h1>
+                  <p class="reading-copy m-0 max-w-2xl text-[0.98rem] text-slate-600 md:text-[1.04rem]">
+                    Deep dives on engineering systems, developer tooling, reliability, and the useful
+                    lessons worth writing down carefully.
+                  </p>
+                </div>
+                <nav class="flex flex-wrap items-center gap-4 text-sm font-semibold text-slate-600 lg:justify-end lg:pb-1">
+                  <a href="/blogs/">All posts</a>
+                  <a href="/blogs/rss.xml">RSS</a>
+                  <a href="https://medium.com/@nairmilind3" target="_blank" rel="noreferrer">
+                    Medium
+                  </a>
+                </nav>
+              </div>
+            </div>
+          </header>
+        )
+      }
+      <slot />
+    </div>
+  </body>
+</html>

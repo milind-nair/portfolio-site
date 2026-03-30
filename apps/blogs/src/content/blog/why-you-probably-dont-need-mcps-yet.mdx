@@ -1,0 +1,114 @@
+---
+title: "Why You Probably Don’t Need MCPs (Yet)"
+description: "Picture this: You’re building an AI app. You want it to check the weather, send emails, maybe query your database."
+pubDate: "2025-09-04T19:47:36.000Z"
+updatedDate: "2025-09-04T19:47:36.585Z"
+tags: ["llm","langchain","mcp server","ai","model context protocol"]
+coverImage: "../../assets/blog/why-you-probably-dont-need-mcps-yet/cover.svg"
+coverAlt: "Article illustration"
+draft: false
+readTime: "4 min read"
+canonicalURL: "https://milindnair.com/blogs/why-you-probably-dont-need-mcps-yet/"
+mediumURL: "https://medium.com/@nairmilind3/why-you-probably-dont-need-mcps-yet-b5c8712d5a92"
+featured: true
+---
+import figure1 from '../../assets/blog/why-you-probably-dont-need-mcps-yet/figure-1.svg';
+import figure2 from '../../assets/blog/why-you-probably-dont-need-mcps-yet/figure-2.svg';
+
+> Originally published on [Medium](https://medium.com/@nairmilind3/why-you-probably-dont-need-mcps-yet-b5c8712d5a92). This version is now archived under `/blogs`.
+
+<p>Picture this: You’re building an AI app. You want it to check the weather, send emails, maybe query your database.</p><p>The hot new thing everyone’s talking about? MCP - the Model Context Protocol.</p><p>But here’s the thing most developers are missing: <strong>you probably don’t need it.</strong></p><p>Let me explain why, and what you should use instead.</p><h3>The Problem MCP Actually Solves</h3><p>Think of MCP like a universal translator for AI models and tools.</p><p>Without it, connecting models to tools looks like this:</p><ul><li>OpenAI → your database (custom code)</li><li>OpenAI → Slack (different custom code)</li><li>OpenAI → email service (yet more custom code)</li><li>Anthropic → your database (another custom integration)</li><li>Anthropic → Slack (another integration)</li><li>And so on…</li></ul><p>With MCP, you write the integration once. Every model that “speaks MCP” can connect automatically.</p><p>It’s solving what engineers call the <strong>M × N problem</strong>:</p><ul><li>M models × N tools = potentially M×N integrations</li><li>MCP reduces this to just M + N integrations</li></ul><p>Sounds amazing, right?</p><h3>Here’s the Reality Check</h3><p>Most developers don’t actually have an M × N problem.</p><p>You’re probably building with:</p><ul><li><strong>One</strong> primary AI model (GPT-4, Claude, whatever)</li><li><strong>A handful</strong> of specific tools (your API, database, email service)</li></ul><p>That’s a <strong>1 × N problem</strong>, not <strong>M × N</strong>.</p><p>For 1 × N, writing simple function/tool calls is faster, clearer, and way easier to debug than implementing an entire protocol.</p><h3>What Actually Covers Your Needs</h3><p>Modern AI APIs already solved this. They all support “tool calling” (some call it “function calling”).</p><p>Here’s what you get out of the box:</p><ul><li>Structured outputs in clean JSON</li><li>The AI decides when to call your tools</li><li>Consistent error handling patterns</li><li>Similar patterns across OpenAI, Anthropic, Google (though each has their own API format)</li></ul><p>No protocol needed. No extra complexity.</p><h3>How Smart Frameworks Already Handle This</h3><p>Frameworks like LangChain, CrewAI, Agno, and Autogen figured this out ages ago.</p><p>They use thin abstraction layers instead of heavy protocols.</p><p><strong>Quick Example with LangChain:</strong></p>
+
+```text
+from langchain_core.tools import tool
+
+@tool
+def get_weather(city: str, units: str = "celsius") -> str:
+    """Fetch current weather for a city."""
+    # Your weather API logic here
+    return f"Weather in {city}: 22°{units[0].upper()}"
+
+@tool
+def send_email(recipient: str, subject: str, body: str) -> str:
+    """Send an email to a recipient."""
+    # Your email sending logic here
+    return f"Email sent to {recipient}"
+```
+
+<p>Now watch the magic:</p>
+
+```text
+from langchain_openai import ChatOpenAI
+from langchain_anthropic import ChatAnthropic
+
+tools = [get_weather, send_email]
+
+# Works with OpenAI
+openai_model = ChatOpenAI(model="gpt-4").bind_tools(tools)
+
+# Same tools work with Anthropic
+anthropic_model = ChatAnthropic(model="claude-4-sonnet").bind_tools(tools)
+
+# No provider-specific code needed
+response = openai_model.invoke("What's the weather in Paris?")
+```
+
+<p>This is the <strong>1 × N solution</strong> in action:</p><ul><li>Define tools once</li><li>Framework handles different providers</li><li>Way simpler than a full protocol</li></ul><p>CrewAI and Autogen follow similar patterns. They all solve the problem without the heavyweight approach.</p>
+
+<figure>
+  <img src={figure1.src} alt="Article illustration" loading="lazy" />
+  <figcaption>Function/Tool-Calling</figcaption>
+</figure>
+
+      <h3>When You Actually Need MCP</h3><p>MCP makes sense in specific scenarios. But they’re rarer than you think.</p><h4><strong>1. You’re Building a Platform</strong></h4><p>Creating a marketplace where multiple AI models need access to multiple third-party tools? MCP’s standardization pays off here.</p><h4>2. You’re a Tool Vendor</h4><p>Companies like Slack or Notion benefit from implementing MCP once instead of custom integrations for every AI model.</p><h4>3. You Have True M × N Complexity</h4><p>Genuinely supporting 5+ AI models across 10+ tools in production? Now the integration matrix gets messy without standardization.</p><h4>4. You’re Playing the Long Game</h4><p>If your roadmap includes many models and tools over time, MCP might save future headaches.</p><p>But honestly? Most startups and individual projects never reach this complexity.</p><h3>The Simpler Path Forward</h3><p>Here’s what actually works for most developers:</p><p><strong>Start with your LLM’s native tool calling</strong></p><ul><li>Pick one provider and use their API directly:</li></ul>
+
+```text
+# OpenAI approach
+from openai import OpenAI
+
+client = OpenAI()
+tools = [{
+    "type": "function",
+    "function": {
+        "name": "get_weather",
+        "description": "Get weather for a city",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "city": {"type": "string"}
+            }
+        }
+    }
+}]
+response = client.chat.completions.create(
+    model="gpt-4",
+    messages=[{"role": "user", "content": "What's the weather in Paris?"}],
+    tools=tools
+)
+```
+
+<p><strong>Add a thin abstraction if needed</strong></p><ul><li>Want to switch providers easily? Use an existing framework that already solved this:</li></ul>
+
+```text
+# LangChain handles the provider differences for you
+from langchain_openai import ChatOpenAI
+from langchain_anthropic import ChatAnthropic
+from langchain_core.tools import tool
+
+@tool
+def get_weather(city: str) -> str:
+    """Get weather for a city."""
+    # Your logic here
+    return f"Weather in {city}: sunny"
+
+# Same tool works with different providers
+openai_model = ChatOpenAI(model="gpt-4").bind_tools([get_weather])
+anthropic_model = ChatAnthropic(model="claude-4-sonnet").bind_tools([get_weather])
+```
+
+<p><strong>Don’t over-engineer</strong></p><ul><li>Begin with one model and essential tools</li><li>Add complexity only when the problem demands it</li></ul><p>This approach is:</p><ul><li>Faster to ship</li><li>Easier to debug</li><li>More maintainable</li><li>Handles 90% of real use cases</li></ul><h3>The Bottom Line</h3><p>MCP solves a real problem. But it’s a problem most developers don’t have yet.</p><p>Start simple. Ship fast. Add complexity only when the problem forces your hand.</p><p>Your users will thank you for the working product, not the elegant architecture they’ll never see.</p>
+
+<figure>
+  <img src={figure2.src} alt="Article illustration" loading="lazy" />
+  <figcaption>r/mcp</figcaption>
+</figure>
