@@ -24,7 +24,7 @@ export const ModeProvider = ({ children }) => {
   }, [mode]);
 
   return (
-    <ModeContext.Provider value={{ mode, toggleMode }}>
+    <ModeContext.Provider value={{ mode, toggleMode, setMode }}>
       {children}
     </ModeContext.Provider>
   );
