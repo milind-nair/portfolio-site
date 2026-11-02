@@ -19,6 +19,10 @@ import PersonIcon from '@mui/icons-material/Person';
 import WorkIcon from '@mui/icons-material/Work';
 import EmailIcon from '@mui/icons-material/Email';
 import Avatar from '@mui/material/Avatar';
+import TerminalIcon from '@mui/icons-material/Terminal';
+import Tooltip from '@mui/material/Tooltip';
+import TerminalOverlay from './terminal/TerminalOverlay';
+import { useTerminal } from '../context/TerminalContext';
 import { about } from '../constants';
 import { useMode } from '../context/ModeContext';
 import CodeIcon from '@mui/icons-material/Code';
@@ -40,6 +44,7 @@ function Layout(props) {
   const { window, darkMode, toggleDarkMode, children } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const { mode, toggleMode } = useMode();
+  const { toggleOverlay } = useTerminal();
   const [activeSection, setActiveSection] = React.useState('hero');
 
   const handleDrawerToggle = () => {
@@ -202,6 +207,11 @@ function Layout(props) {
             <MenuIcon />
           </IconButton>
           <Box sx={{ flexGrow: 1 }} /> 
+          <Tooltip title="Terminal (`)">
+            <IconButton color="inherit" aria-label="Open terminal" onClick={toggleOverlay} sx={{ mr: 1 }}>
+              <TerminalIcon />
+            </IconButton>
+          </Tooltip>
           <Button 
             onClick={toggleDarkMode} 
             color="inherit"
@@ -241,6 +251,7 @@ function Layout(props) {
           </Button>
         </Toolbar>
       </AppBar>
+      <TerminalOverlay />
       <Box
         component="nav"
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
