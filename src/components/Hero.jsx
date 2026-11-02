@@ -22,7 +22,7 @@ const Hero = () => {
         mb: 6,
       }}
     >
-      <Container maxWidth="md">
+      <Container maxWidth={mode === 'dev' ? false : 'md'} disableGutters={mode === 'dev'}>
         {mode === 'dev' ? (
           <HeroTerminal />
         ) : (

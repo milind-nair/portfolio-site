@@ -68,7 +68,8 @@ const HeroTerminal = () => {
   }, [appendLines, getIntroPlayed, markIntroPlayed, getData]);
 
   return (
-    <Box ref={boxRef} sx={{ height: { xs: 300, sm: 360 }, mb: 4, maxWidth: 800 }}>
+    // Fill the hero: 80vh minus its padding and the button row below.
+    <Box ref={boxRef} sx={{ height: { xs: 360, sm: 'calc(80vh - 140px)' }, minHeight: 360, mb: 4 }}>
       <Terminal variant="hero" inputRef={inputRef} pendingLine={typed} />
     </Box>
   );
