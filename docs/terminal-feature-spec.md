@@ -115,3 +115,44 @@ Fun:
 - `src/components/terminal/Terminal.test.jsx`: render the provider + overlay, press `` ` ``, type `help` + Enter, and assert the output appears; `goto projects` emits a scroll effect and closes the overlay.
 - Mock `fetch`/`axios` for `github` and the blogs metadata.
 - `CI=true npm test -- --watchAll=false` and `npm run build:site` must both pass.
+
+## Engine contract (binding for implementation)
+
+All engine modules are pure: no React, no DOM, and no `window` access except `fetch` inside the `github` command.
+
+```js
+// src/terminal/data.js
+export const fallbackBlogs;                 // about.blogs normalized to the Blog shape
+export function normalizeBlogs(json);       // posts.json array -> Blog[] (same mapping as Blogs.jsx)
+export function buildData({ about, projects, blogs }); // -> Data
+// Blog    = { slug, title, path, dateLabel, readTime, description, external }
+// Project = constants project + { slug }   (slug = kebab-case of title)
+// Data    = { about, projects: Project[], blogs: Blog[], resumeUrl, sections: ['hero','about','projects','blogs','contact'] }
+//   resumeUrl = `${process.env.PUBLIC_URL || ''}/Milind_Nair.pdf`
+
+// src/terminal/engine.js
+export function createSession();            // -> { history: [], cwd: '~' }
+export function promptFor(cwd);             // -> 'milind@portfolio:~/projects$'
+export async function run(input, session, data);
+//   -> { output: Line[], effects: Effect[], session }   (new session object; input appended to history if non-empty)
+//   run does NOT echo the input line; the UI renders the echo with promptFor(session.cwd before run).
+export function navigateHistory(history, index, direction); // direction 'up'|'down'; index null = not browsing
+//   -> { index, value }   ('down' past newest -> { index: null, value: '' })
+
+// src/terminal/completion.js
+export function complete(input, session, data); // -> { value, candidates }
+//   unique match: value = completed input (trailing space after a command / file; trailing '/' after a dir), candidates = []
+//   ambiguous: value = longest common prefix applied, candidates = all matches
+// src/terminal/filesystem.js: buildFs(data), resolvePath(cwd, path), listDir(fs, path), readFile(fs, path) (internal to engine, but exported for tests)
+```
+
+```js
+// Line    = { segments: Segment[], delayMs?: number }   delayMs: UI waits this long before showing the line (sudo hire-me animation)
+// Segment = { text: string, color?: 'muted'|'accent'|'path'|'dir'|'error'|'success', href?: string, bold?: boolean }
+// Effect  = { type: 'scroll', target: sectionId }
+//         | { type: 'open', url }                      // new tab; mailto: also via open
+//         | { type: 'theme', value: 'dark'|'light'|'toggle' }
+//         | { type: 'mode',  value: 'dev'|'recruiter'|'toggle' }
+//         | { type: 'clear' }
+//         | { type: 'close' }                          // close the overlay (goto emits scroll + close)
+```
